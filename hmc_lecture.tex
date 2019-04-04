@@ -1,0 +1,87 @@
+\documentclass[18pt]{beamer}
+
+\usetheme{Madrid} % [secheader]
+\setbeamertemplate{footline}{}
+\usefonttheme{professionalfonts}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage[normalem]{ulem}
+\usepackage{hyperref}
+\usepackage{bm}
+\usepackage{dsfont}
+\usepackage{subcaption}
+\usepackage{natbib}
+\usepackage{bbm}
+\usepackage{calc}  % For widthof command
+\usepackage{xcolor}
+\usepackage{natbib}
+\bibliographystyle{abbrvnat}
+\setcitestyle{authoryear, open={(}, close={)}}
+
+\setbeamerfont{itemize/enumerate subbody}{size=\normalsize} %to set the body size
+%\setbeamertemplate{frametitle}[default][center]
+\setbeamertemplate{itemize subitem}{\normalsize\raise1.25pt\hbox{\donotcoloroutermaths$\blacktriangleright$}}  %to set the symbol size
+
+% HMC related macros
+\newcommand{\position}{\theta}
+\newcommand{\momentum}{p}
+\newcommand{\bposition}{\bm{\position}}
+\newcommand{\bmomentum}{\bm{\momentum}}
+
+% Math macros
+\newcommand{\transpose}{\text{\raisebox{.5ex}{$\intercal$}}}
+\newcommand{\diff}{{\rm d}}
+
+% Probability / statistics macros
+\newcommand{\given}{\, | \,}
+\newcommand{\normal}{\mathcal{N}}
+
+% Variable / Greek symbol macros
+\newcommand{\y}{\bm{y}}
+\newcommand{\x}{\bm{x}}
+\newcommand{\bPhi}{\bm{\Phi}}
+\newcommand{\bSigma}{\bm{\Sigma}}
+
+% Utility macros
+\newcommand{\todo}[1]{\textcolor{red}{#1}}
+
+% Set the color theme of the presentation
+\definecolor{uclablue}{RGB}{39, 116, 174}
+\usecolortheme[named=uclablue]{structure}
+\colorlet{textcolor}{white}
+\setbeamercolor{frametitle}{fg=textcolor}
+\setbeamercolor{titlelike}{fg=textcolor}
+\setbeamercolor{section in head/foot}{fg=textcolor}
+%\colorlet{toccolor}{black}
+%\setbeamercolor{section in toc}{fg=toccolor}
+
+\setbeamertemplate{enumerate items}[default]
+\setbeamerfont*{itemize/enumerate body}{size=\normalsize}
+\setbeamerfont*{itemize/enumerate subbody}{parent=itemize/enumerate body}
+\setbeamerfont*{itemize/enumerate subsubbody}{parent=itemize/enumerate body}
+
+\setbeamercovered{dynamic}
+\setbeamercovered{invisible}
+\beamertemplatenavigationsymbolsempty
+
+% Insert table of content frames between sections automatically. See http://en.wikibooks.org/wiki/LaTeX/Presentations
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+    %    \tableofcontents[currentsection, currentsubsection]
+  \end{frame}
+}
+
+\title[Bayesian Sparse GLM]{Practical introduction to Hamiltonian Monte Carlo}
+\author{Aki Nishimura\inst{1}}
+\institute[]{Department of Biomathematics, University of California - Los Angeles \inst{1}}
+\date{\today}
+
+
+\begin{document}
+\frame{\titlepage}
+
+
+\end{document}

@@ -1,0 +1,11 @@
+*.aux
+*.bbl
+*.log
+*.synctex.gz
+*.nav
+*.out
+*.snm
+*.toc
+*.DS_Store
+
+hmc_lecture.pdf
