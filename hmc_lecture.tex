@@ -27,6 +27,9 @@
 \newcommand{\momentum}{p}
 \newcommand{\bposition}{\bm{\position}}
 \newcommand{\bmomentum}{\bm{\momentum}}
+\newcommand{\Position}{\Theta}
+\newcommand{\Momentum}{P}
+\newcommand{\integrationTime}{\tau}
 
 % Math macros
 \newcommand{\transpose}{\text{\raisebox{.5ex}{$\intercal$}}}
@@ -39,8 +42,10 @@
 % Variable / Greek symbol macros
 \newcommand{\y}{\bm{y}}
 \newcommand{\x}{\bm{x}}
+\newcommand{\I}{\bm{I}}
 \newcommand{\bPhi}{\bm{\Phi}}
 \newcommand{\bSigma}{\bm{\Sigma}}
+\newcommand{\nparam}{d}
 
 % Utility macros
 \newcommand{\todo}[1]{\textcolor{red}{#1}}
@@ -54,6 +59,13 @@
 \setbeamercolor{section in head/foot}{fg=textcolor}
 %\colorlet{toccolor}{black}
 %\setbeamercolor{section in toc}{fg=toccolor}
+
+%  Block colors
+\setbeamercolor{block title}{use=structure, fg=textcolor, bg=structure.fg}
+\setbeamercolor{block body}{
+	parent=normal text, use=block title, bg=block title.bg!10}
+%\setbeamercolor{block title}{bg=uclablue!100, fg=white}
+
 
 \setbeamertemplate{enumerate items}[default]
 \setbeamerfont*{itemize/enumerate body}{size=\normalsize}
@@ -83,5 +95,52 @@
 \begin{document}
 \frame{\titlepage}
 
+\section{Title TBD}
+
+\frame{
+	\frametitle{Set-up and terminologies for HMC}	
+	\begin{itemize}
+		\item To sample from the distribution of interest $\pi_\Position(\bposition)$, HMC augments the parameter space with an auxiliary parameter $\bmomentum \in \mathbb{R}^\nparam \sim \normal(\mathbf{0}, m \I)$.
+		\item HMC then samples from the joint density
+		\begin{equation*}
+		\pi(\bposition, \bmomentum) 
+			\propto \pi_\Position(\bposition) \times \mathcal{N}\left( \bmomentum \, ; \mathbf{0}, m \I \right) 
+		\end{equation*}
+		where $\bposition$ and $\bmomentum$ are referred to as \textit{position} and \textit{momentum} variables.
+		\item HMC terminologies:
+		\begin{itemize}
+			\item $U(\bposition) = - \log \pi_\Theta(\bposition)$ : \textit{potential energy}.
+			\item $K(\bmomentum) = \frac{1}{m} \bmomentum^\transpose \bmomentum$ : \textit{kinetic energy}.
+			\item $H(\bposition, \bmomentum) = U(\bposition) + K(\bmomentum) = - \log \pi(\bposition, \bmomentum)$ : \newline \phantom{$H(\bposition, \bmomentum) = U(\bposition) + K(\bmomentum)$ =} \textit{Hamiltonian} or \textit{total energy}.
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Transition kernel of HMC}
+	\begin{itemize}
+	\item HMC generates a proposal by combining momentum randomization and \textit{deterministic} transition of simulated Hamiltonian dynamics.
+	\end{itemize}
+	\begin{block}{HMC transition rule}
+		Given the current state $(\bposition_0, \bmomentum_0)$, HMC generates the next state as follows:
+		\begin{enumerate}
+			\item Randomize momentum: $\bmomentum_0 \sim \mathcal{N}\left(\mathbf{0}, m \I \right)$.
+			\item Generate a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime), - \bmomentum(\integrationTime))$ by approximating \newline the solution $\left\{ (\bposition(t), \bmomentum(t)) : t \in [0, \integrationTime] \right\}$ of \textit{Hamilton's equation}
+				\vspace{-.3\baselineskip}
+				\begin{equation} \label{eq:hamilton}
+				\vspace{-.3\baselineskip}
+				\begin{aligned}
+				\frac{{\rm d} \bposition}{{\rm d} t} 
+				&= m^{-1} \bmomentum, \quad
+				\frac{{\rm d} \bmomentum}{{\rm d} t} 
+				= - \nabla_{\bposition} U(\bposition) 
+				\end{aligned}
+				\end{equation}
+				with initial condition $(\bposition(0), \bmomentum(0)) = (\bposition_0, \bmomentum_0)$.
+			\item Accept or reject the proposal. 
+				% with the probability $$ \min\left\{1, \pi(\bposition^*, \bmomentum^*) / \pi(\bposition, \bmomentum) \right\} $$
+		\end{enumerate}
+	\end{block}
+}
 
 \end{document}
