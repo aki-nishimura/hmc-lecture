@@ -50,8 +50,14 @@
 % Utility macros
 \newcommand{\todo}[1]{\textcolor{red}{#1}}
 
-% Set the color theme of the presentation
+
+% Color definitions
 \definecolor{uclablue}{RGB}{39, 116, 174}
+\definecolor{navyblue}{rgb}{0.0, 0.0, 0.5}
+\definecolor{turquoise}{rgb}{0.19, 0.84, 0.78}
+\definecolor{mediumturquoise}{rgb}{0.28, 0.82, 0.8}
+
+% Set the color theme of the presentation
 \usecolortheme[named=uclablue]{structure}
 \colorlet{textcolor}{white}
 \setbeamercolor{frametitle}{fg=textcolor}
@@ -94,6 +100,7 @@
 
 \begin{document}
 \frame{\titlepage}
+
 
 \section{Title TBD}
 
@@ -141,6 +148,16 @@
 				% with the probability $$ \min\left\{1, \pi(\bposition^*, \bmomentum^*) / \pi(\bposition, \bmomentum) \right\} $$
 		\end{enumerate}
 	\end{block}
+}
+
+\frame{
+	\frametitle{Visual illustration: HMC in action}
+	\begin{center}
+	\href{run:Figure/hmc_in_action_2d_Gaussian.avi}{\color{mediumturquoise} \fontsize{16pt}{18pt} \selectfont HMC for a 2d Gaussian (correlation $= 0.9$)}
+	\vspace{4ex}
+
+	\href{run:Figure/hmc_in_action_2d_Gaussian_slow_motion.avi}{\color{mediumturquoise} \fontsize{16pt}{18pt} \selectfont Click here for slow motion version}
+	\end{center}
 }
 
 \end{document}
