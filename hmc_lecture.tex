@@ -102,6 +102,76 @@
 \frame{\titlepage}
 
 
+\section{Why \& What to learn about Hamiltonian Monte Carlo}
+
+\frame{
+	\frametitle{What is Hamiltonian Monte Carlo (HMC)?}
+	\begin{itemize}
+	\item HMC is a state-of-the-art \textit{general-purpose} sampler, only requiring evaluation of the target log-density and its gradient.
+	\item Required computations can be done algorithmically and efficiently for probabilistic models (or, more precisely, Bayesian networks):
+		\begin{itemize}
+		\item density evaluation via \textit{computational (directed acyclic) graphs} 
+		\item gradient via \textit{reverse mode differentiation} / \textit{back-propagation}
+		\end{itemize}
+	\begin{figure}
+		\centering
+		\hspace{-.1\linewidth}
+		\includegraphics[height=.45\textheight]{Figure/probabilistic_programming_languages}
+	\end{figure}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{What is HMC? (and what it is \textbf{not})}
+	\begin{itemize}
+	\item HMC is \textbf{not} a silver-bullet, though often good enough for computing posteriors of not-overly-complicated models with moderate sized data.
+	\item HMC can be almost guaranteed to fail on certain target distributions.
+		\begin{itemize}
+		\item Work-arounds may exists in some cases, but not always.
+		\end{itemize}
+	\item Performance of HMC is sensitive to
+		\begin{itemize}
+		\item parametrization of the model.
+		\item tuning parameters (which may be adjusted during a ``warm-up'').
+		\end{itemize}
+	\item In general, prefer
+		\vspace{-.75\baselineskip}
+		\begin{multline*}
+		\text{model-specific inference algorithm by an expert} \\
+			> \text{probabilistic programming implemnetation} \\
+			> \text{your own code} \hspace{.05\linewidth}
+		\end{multline*} \vspace{-1.5\baselineskip}
+	\item When no other solid solutions exists, use Bayesian modeling and posterior computation via HMC as ``the least of all possible evils.''
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{What is HMC? (and what it is \textbf{not})}
+	\begin{itemize}
+	\item Some softwares (e.g.\ \texttt{rstanarm}) incorporate model-specific best practices in applying HMC, yielding quite impressive performance.
+	\item Some cutting-edge Bayesian methods rely on HMC for posterior computation with competitive computational efficiency.
+		\begin{itemize}
+		\item e.g.\ Bayesian sparse regression for GLM and survival analysis
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Learning objectives: things to take home with}
+	\begin{itemize}
+	\item Sensitivity of HMC's performance means that, even as an end-user, one benefits from basic understandings of the algorithm.
+	\item Hopefully, you will 
+		\begin{itemize}
+		\item know how to parametrize your model for best HMC performance.
+		\item develop intuitions as to when posterior computation is feasible.
+		\item be able to diagnose (and fix if possible) when sampling fails.
+		\item know when to change default parameters in software packages.
+		\item be familiar with research frontiers and improvements on the way.
+		\end{itemize}
+	\end{itemize}
+}
+
+
 \section{Title TBD}
 
 \frame{
