@@ -50,6 +50,26 @@
 % Utility macros
 \newcommand{\todo}[1]{\textcolor{red}{#1}}
 
+% Custom environments
+\newcommand{\defineWithinItemizeSpacing}{
+	\setlength{\abovedisplayskip}{.3\baselineskip}
+	\setlength{\belowdisplayskip}{.3\baselineskip}
+}
+\newenvironment{itemizedEquation}{
+	\defineWithinItemizeSpacing
+	\begin{equation}
+}{
+	\end{equation}
+}
+\makeatletter
+\newenvironment{itemizedEquation*}{
+	\defineWithinItemizeSpacing
+	\begin{equation*}
+}{
+	\end{equation*}
+}
+\makeatother
+
 
 % Color definitions
 \definecolor{uclablue}{RGB}{39, 116, 174}
@@ -220,10 +240,10 @@
 	\begin{itemize}
 		\item To sample from the distribution of interest $\pi_\Position(\bposition)$, HMC augments the parameter space with an auxiliary parameter $\bmomentum \in \mathbb{R}^\nparam \sim \normal(\mathbf{0}, m \I)$.
 		\item HMC then samples from the joint density
-		\begin{equation*}
+		\begin{itemizedEquation*}
 		\pi(\bposition, \bmomentum) 
 			\propto \pi_\Position(\bposition) \times \mathcal{N}\left( \bmomentum \, ; \mathbf{0}, m \I \right) 
-		\end{equation*}
+		\end{itemizedEquation*}
 		where $\bposition$ and $\bmomentum$ are referred to as \textit{position} and \textit{momentum} variables.
 		\item HMC terminologies:
 		\begin{itemize}
