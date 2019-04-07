@@ -187,6 +187,31 @@
 	\end{itemize}
 }
 
+\frame{
+	\frametitle{What does Hamiltonian dynamics have to do with MCMC?}
+	\begin{itemize}
+	\item Two (often competing) objectives in constructing a proposal density:
+		\begin{itemize}
+		\item you want to make "large" moves to explore the space. 
+		\item you want sufficiently high acceptance rates.
+		\end{itemize}
+	\item e.g.\ random-walk Metropolis for $\nparam$-dimensional Gaussians:
+		\begin{itemize}
+		\item Proposal variance needs to be $O\big(d^{-1}\big)$ for $O(1)$ acceptance rate.
+		\item It takes $\nparam$ steps for the chain to travel $O(1)$ distance.
+		\item The cost of generating one effective sample is proportional to
+			\vspace{-.5\baselineskip}
+			\[ \nparam \times \text{(cost of likelihood evaluation \& proposal generation)}. \] 
+			\vspace{-1.5\baselineskip}
+		\item Note: the cost is often described as $O(d^2)$ in the literature.
+		\end{itemize}
+	\item Question: can we generate proposals that are far away from the current state, yet still maintains high acceptance rate? 
+		\begin{itemize}
+		\item Yes, use Hamiiltonian dynamics to generate proposals! 
+		\end{itemize}
+	\end{itemize}
+}
+
 
 \section{Title TBD}
 
