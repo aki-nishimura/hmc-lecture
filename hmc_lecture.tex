@@ -286,6 +286,26 @@
 }
 
 \frame{
+	\frametitle{Physical interpretation of HMC trajectories}
+	\begin{itemize}
+	\item Hamilton's equation describes a motion of a particle with mass $m$ under the potential energy field $U(\bposition)$:
+		\begin{itemizedEquation*}
+		\begin{aligned}
+		\text{``velolicty''}
+			&= \frac{\diff \bposition}{\diff t} 
+			= m^{-1} \bmomentum
+			\\
+		\text{``mass $\times$ acceleration''}
+			&= \frac{\diff \bmomentum}{\diff t} 
+			= - \nabla_{\bposition} U(\bposition) 
+			= \text{``force''}
+		\end{aligned}
+		\end{itemizedEquation*}
+	\item Trajectory $\bposition(t)$ accelerates toward lower values of the potential $U(\bposition)$ or, equivalently, larger values of $\log \pi_\Position(\bposition) = - U(\bposition)$.
+	\end{itemize}
+}
+
+\frame{
 	\frametitle{Visual illustration: HMC in action}
 	\begin{center}
 	\href{run:Figure/hmc_in_action_2d_Gaussian.avi}{\color{mediumturquoise} \fontsize{16pt}{18pt} \selectfont HMC for a 2d Gaussian (correlation $= 0.9$)}
