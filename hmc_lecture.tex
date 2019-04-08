@@ -343,6 +343,7 @@
 	\end{figure}
 }
 
+\newcommand{\centerColumn}[2]{\makebox[#1][c]{$\displaystyle #2$}}
 \frame{
 	\frametitle{Geometric / structure-preserving numerical integration}
 	\begin{itemize}
@@ -359,15 +360,33 @@
 		the \textit{leapfrog} (or \textit{velocity Verlet}) method carries out the updates
 		\begin{itemizedEquation*}
 		\begin{aligned}
-		\bmomentum_{t + \stepsize / 2} 
-			&= {\centering \bmomentum_t}
-			&&- \frac{\stepsize}{2} \nabla U(\bposition_t) \\
-		\bposition_{t + \stepsize}
-			&= \bposition_t 
-			&&+ \stepsize \, m^{-1} \bmomentum_{t + \stepsize / 2}  \\
-		\bmomentum_{t + \stepsize}
-			&= \bmomentum_{t + \stepsize / 2} 
-			&&- \frac{\stepsize}{2} \nabla U(\bposition_{t + \stepsize}).
+		\centerColumn{3.5em}{
+			\bmomentum_{t + \stepsize / 2}
+		}
+			&= \centerColumn{3.5em}{
+				\bmomentum_t
+			}
+			&-&& \centerColumn{5.5em}{
+				\frac{\stepsize}{2} \nabla U(\bposition_t) 
+			} \\
+		\centerColumn{3.5em}{
+			\bposition_{t + \stepsize}
+		}
+			&= \centerColumn{3.5em}{
+				\bposition_t 
+			}
+			&+&& \centerColumn{5.5em}{
+				\stepsize \, m^{-1} \bmomentum_{t + \stepsize / 2}
+			} \\
+		\centerColumn{3.5em}{
+			\bmomentum_{t + \stepsize}
+		}
+			&= \centerColumn{3.5em}{
+				\bmomentum_{t + \stepsize / 2}
+			} 
+			&-&& \centerColumn{5.5em}{
+				\frac{\stepsize}{2} \nabla U(\bposition_{t + \stepsize}).
+			}
 		\end{aligned}
 		\end{itemizedEquation*}
 	\end{itemize}
