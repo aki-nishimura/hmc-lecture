@@ -343,5 +343,35 @@
 	\end{figure}
 }
 
+\frame{
+	\frametitle{Geometric / structure-preserving numerical integration}
+	\begin{itemize}
+	\item In practice, Hamiltonian dynamics must be numerically approximated.
+	\item \textit{Integrator} refers to an algorithm for approximating solutions of ODEs.
+	\item For an approximate dynamics to remain a valid proposal mechanism, the integrator must preserve reversibility (and volume-preservation).
+	\item To approximate the evolution from time $t$ to $t + \stepsize$ of dynamics
+		\begin{itemizedEquation*}
+		\frac{\diff \bposition}{\diff t} 
+			= m^{-1} \bmomentum, \quad
+		\frac{\diff \bmomentum}{\diff t} 
+			= - \nabla U(\bposition),
+		\end{itemizedEquation*}
+		the \textit{leapfrog} (or \textit{velocity Verlet}) method carries out the updates
+		\begin{itemizedEquation*}
+		\begin{aligned}
+		\bmomentum_{t + \stepsize / 2} 
+			&= {\centering \bmomentum_t}
+			&&- \frac{\stepsize}{2} \nabla U(\bposition_t) \\
+		\bposition_{t + \stepsize}
+			&= \bposition_t 
+			&&+ \stepsize \, m^{-1} \bmomentum_{t + \stepsize / 2}  \\
+		\bmomentum_{t + \stepsize}
+			&= \bmomentum_{t + \stepsize / 2} 
+			&&- \frac{\stepsize}{2} \nabla U(\bposition_{t + \stepsize}).
+		\end{aligned}
+		\end{itemizedEquation*}
+	\end{itemize}
+}
+
 
 \end{document}
