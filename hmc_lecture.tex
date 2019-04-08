@@ -30,6 +30,9 @@
 \newcommand{\Position}{\Theta}
 \newcommand{\Momentum}{P}
 \newcommand{\integrationTime}{\tau}
+\newcommand{\stepsize}{\Delta t}
+\newcommand{\solutionOp}{\bm{\Psi}}
+\newcommand{\involution}{\bm{R}}
 
 % Math macros
 \newcommand{\transpose}{\text{\raisebox{.5ex}{$\intercal$}}}
@@ -38,6 +41,7 @@
 % Probability / statistics macros
 \newcommand{\given}{\, | \,}
 \newcommand{\normal}{\mathcal{N}}
+\newcommand{\proposalKernel}{Q}
 
 % Variable / Greek symbol macros
 \newcommand{\y}{\bm{y}}
@@ -268,9 +272,9 @@
 				\begin{equation} \label{eq:hamilton}
 				\vspace{-.3\baselineskip}
 				\begin{aligned}
-				\frac{{\rm d} \bposition}{{\rm d} t} 
+				\frac{\diff \bposition}{\diff t} 
 				&= m^{-1} \bmomentum, \quad
-				\frac{{\rm d} \bmomentum}{{\rm d} t} 
+				\frac{\diff \bmomentum}{\diff t} 
 				= - \nabla_{\bposition} U(\bposition) 
 				\end{aligned}
 				\end{equation}
@@ -290,5 +294,54 @@
 	\href{run:Figure/hmc_in_action_2d_Gaussian_slow_motion.avi}{\color{mediumturquoise} \fontsize{16pt}{18pt} \selectfont Click here for slow motion version}
 	\end{center}
 }
+
+\frame{
+	\frametitle{Theory of HMC: symmetry of its proposals}
+	\begin{itemize}
+	\item Hamiltonian dynamics generates a \textit{symmetric} proposal 
+	\begin{itemizedEquation*}
+	\proposalKernel\left\{ (\bposition, \bmomentum) \to (\bposition^*, \bmomentum^*)  \right\}
+		= \proposalKernel\left\{ (\bposition^*, \bmomentum^*) \to (\bposition, \bmomentum) \right\}
+	\end{itemizedEquation*}
+	by virtue of its \textit{reversibility} (and \textit{volume-preservation}).
+		\begin{itemize}
+		\item For a deterministic proposal kernel, interpret the symmetry as
+		\begin{itemizedEquation*}
+		\proposalKernel\left\{ S \to S^* \right\}
+			= \proposalKernel\left\{ S^* \to S \right\}
+		\end{itemizedEquation*}
+		for a pair of sets $S$ and $S^*$.
+		\end{itemize}
+	\item Evolution of Hamiltonian dynamics can be ``reversed'' (or ``inverted'') by flipping momentum and applying the same dynamics:
+		\begin{itemizedEquation*}
+		(\bposition, \bmomentum) \to (\bposition', \bmomentum')
+			\quad \Leftrightarrow \quad
+			(\bposition', -\bmomentum') \to (\bposition, -\bmomentum)
+		\end{itemizedEquation*}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Theory of HMC: symmetry of its proposals}
+	\begin{itemize}
+	\item Let $\{ \solutionOp_t \}_{t \in \mathbb{R}}$ denote the \textit{solution operator} of dynamics i.e.\ 
+		\begin{itemizedEquation*}
+		(\bposition(t), \bmomentum(t)) := \solutionOp_t(\bposition, \bmomentum)
+		\end{itemizedEquation*}
+		solves Hamilton's equations and $\solutionOp_0(\bposition, \bmomentum) = (\bposition, \bmomentum)$.
+	\item Let $\involution(\bposition, \bmomentum) = (\bposition, - \bmomentum)$ denote the momentum flip operator.	
+	\item \textit{Reversibility} of dynamics means that
+		\begin{itemizedEquation*}
+		\left( \involution \circ \solutionOp_t \right)^{-1} = \involution \circ \solutionOp_t 
+			\ \text{ for all } \ t \in \mathbb{R}.
+		\end{itemizedEquation*}
+	\end{itemize}
+	\vspace{-.5\baselineskip}
+	\begin{figure}
+	\centering
+	\includegraphics[height=.45\textheight]{Figure/reversible_map}
+	\end{figure}
+}
+
 
 \end{document}
