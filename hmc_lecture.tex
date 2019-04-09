@@ -395,7 +395,17 @@
 			&-& \displaystyle \frac{\stepsize}{2} \nabla U(\bposition_{t + \stepsize}).
 		\end{array}
 		\end{itemizedEquation*}
-	\item Map $\solutionOp_{\stepsize}^L$ induced by $L = \lfloor \tau / \stepsize \rfloor$ steps of the leapfrog updates approximate the exact evolution from time $t = 0$ to $t = \integrationTime$. 
+	\item Map $\solutionOp_{\stepsize}^L$ induced by $L(\tau) = \lfloor \tau / \stepsize \rfloor$ steps of the leapfrog updates approximate the exact evolution from time $t = 0$ to $t = \integrationTime$. 
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{High acceptance rate of HMC proposals}
+	\begin{itemize}
+	\item If we could solve Hamiltonian dynamics exactly, then HMC proposals would have $100\%$ (!) acceptance rates.
+	\item In essence, this is because the target $\pi(\cdot, \cdot)$ is an \textit{invariant} distribution of the dynamics --- if $(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$, then $\solutionOp_t(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$ for all $t$.
+	\item With numerical approximation, acceptance rate of HMC proposals  converges to 1 as $\stepsize \to 0$ for a fixed $\tau$ and $L(\tau) = \lfloor \tau / \stepsize \rfloor$.
+		% TODO : later provide a more quantitative discussion of the error as a function of stepsize.
 	\end{itemize}
 }
 
