@@ -420,8 +420,7 @@
 		\item To see why the Jacobian is needed, recall that the density of a transformed variables $(\bposition^*, \bmomentum^*) = \solutionOp(\bposition, \bmomentum)$ is given as
 			\begin{itemizedEquation*}
 			\pi_{\Position^*, \, \Momentum^*}(\bposition^*, \bmomentum^*) 
-				= \pi_{\Position, \, \Momentum} \! \left( \solutionOp^{-1}(\bposition^*, \bmomentum^*) \right) 
-				\! \left| \Diff \solutionOp^{-1}(\bposition^*, \bmomentum^*) \right|
+				= \pi_{\Position, \, \Momentum}(\bposition, \bmomentum) \left| \Diff \solutionOp(\bposition, \bmomentum) \right|^{-1}.
 			\end{itemizedEquation*}
 		\end{itemize}
 	\end{itemize}
