@@ -407,6 +407,12 @@
 	\item In essence, this is because the target $\pi(\cdot, \cdot)$ is an \textit{invariant} distribution of the dynamics --- if $(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$, then $\solutionOp_t(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$ for all $t$.
 	\item With numerical approximation, acceptance rate of HMC proposals  converges to 1 as $\stepsize \to 0$ for a fixed $\tau$ and $L(\tau) = \lfloor \tau / \stepsize \rfloor$.
 		% TODO : later provide a more quantitative discussion of the error as a function of stepsize.
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Acceptance probability of proposals via reversible map}
+	\begin{itemize}
 	\item For a general reversible map $\solutionOp$, the correct acceptance probability of a proposal $(\bposition^*, \bmomentum^*) = \solutionOp(\bposition, \bmomentum)$ is given by 
 		\begin{itemizedEquation*}
 		\min \! \left\{
@@ -416,6 +422,7 @@
 				\pi(\bposition, \bmomentum)}
 		\right\}
 		\end{itemizedEquation*}
+		\vspace{-.5\baselineskip}
 		\begin{itemize}
 		\item To see why the Jacobian is needed, recall that the density of a transformed variables $(\bposition^*, \bmomentum^*) = \solutionOp(\bposition, \bmomentum)$ is given as
 			\begin{itemizedEquation*}
@@ -423,6 +430,19 @@
 				= \pi_{\Position, \, \Momentum}(\bposition, \bmomentum) \left| \Diff \solutionOp(\bposition, \bmomentum) \right|^{-1}.
 			\end{itemizedEquation*}
 		\end{itemize}
+	\item Hamiltonian dynamics and its leapfrog approximation are both volume-preserving, meaning $\left| \Diff \solutionOp_{\integrationTime} \right| = \left| \Diff \solutionOp_{\stepsize}^L \right| = 1$.
+	\item Hence, the acceptance probability of an HMC proposal is
+		\begin{itemizedEquation*}
+		\min \! \left\{
+			1, \, \frac{
+				\pi(\bposition^*, \bmomentum^*)
+			}{
+				\pi(\bposition, \bmomentum)}
+		\right\}
+			= \min \! \left\{
+				1, \, \exp\!\big( H(\bposition, \bmomentum) - H(\bposition^*, \bmomentum^*) \big)
+			\right\}.
+		\end{itemizedEquation*}
 	\end{itemize}
 }
 
