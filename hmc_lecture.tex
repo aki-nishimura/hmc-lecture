@@ -82,6 +82,7 @@
 \definecolor{navyblue}{rgb}{0.0, 0.0, 0.5}
 \definecolor{turquoise}{rgb}{0.19, 0.84, 0.78}
 \definecolor{mediumturquoise}{rgb}{0.28, 0.82, 0.8}
+\definecolor{lava}{rgb}{0.81, 0.06, 0.13}
 
 % Set the color theme of the presentation
 \usecolortheme[named=uclablue]{structure}
@@ -443,6 +444,37 @@
 			= \min \! \left\{
 				1, \, \exp\!\big( H(\bposition, \bmomentum) - H(\bposition^*, \bmomentum^*) \big)
 			\right\}.
+		\end{itemizedEquation*}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Energy-conservation property for high acceptance rate}
+	\begin{itemize}
+	\item Hamiltonian dynamics is \textit{energy-conserving}, meaning the Hamiltonian remains constant along its trajectory $(\bposition(t), \bmomentum(t))$:
+		\begin{itemizedEquation*}
+		H(\bposition(t), \bmomentum(t)) 
+			= H(\bposition(0), \bmomentum(0))
+			\ \text{ for all } \ t.
+		\end{itemizedEquation*}
+	\item With the leapfrog approximation for a fixed $\integrationTime$,  the error is
+		\begin{itemizedEquation*}
+		\Delta H
+			= H(\bposition_{L \stepsize}, \bmomentum_{L \stepsize})
+				- H(\bposition_{0}, \bmomentum_{0})
+			= O(\stepsize^2).
+		\end{itemizedEquation*}
+	\item Metropolis proposals in general satisfies, as $\Delta H \to 0$,
+		\begin{itemizedEquation*}
+		\mathbb{E}\left[ \Delta H \right]
+			\approx \frac{1}{2} \, \mathbb{E}\left[ \Delta H^2 \right]
+		\end{itemizedEquation*}
+		% Note: we have an actual bound $E[\Delta H] \leq E[\Delta H^2]$ for a reversible dynamics-based proposal.
+		% Note: the above relation holds for any Metropolis type algorithm
+	\item HMC proposals thus satisfies $\mathbb{E}[\Delta H] = O(\stepsize^{\textcolor{lava}{4}})$ as $\stepsize \to 0$.
+	\item e.g.\ HMC generates one effective sample from $\nparam$-dimensional Gaussians with the cost of
+		\begin{itemizedEquation*}
+		\nparam^{1 / 4} \times \text{(cost of likelihood \& gradient evaluation)}.
 		\end{itemizedEquation*}
 	\end{itemize}
 }
