@@ -227,14 +227,15 @@
 		\item Proposal variance needs to be $O\big(d^{-1}\big)$ for $O(1)$ acceptance rate.
 		\item It takes $\nparam$ steps for the chain to travel $O(1)$ distance.
 		\item The cost of generating one effective sample is proportional to
-			\vspace{-.5\baselineskip}
-			\[ \nparam \times \text{(cost of likelihood evaluation \& proposal generation)}. \] 
-			\vspace{-1.5\baselineskip}
+			\begin{itemizedEquation*}
+			\nparam \times \text{(cost of likelihood evaluation)}. 
+			\end{itemizedEquation*}
 		\item Note: the cost is often described as $O(d^2)$ in the literature.
 		\end{itemize}
 	\item Question: can we generate proposals that are far away from the current state, yet still maintains high acceptance rate? 
 		\begin{itemize}
 		\item Yes, use Hamiiltonian dynamics to generate proposals! 
+		\item In particular, HMC has the cost of $O(d^{1 / 4})$ in the above example.
 		\end{itemize}
 	\end{itemize}
 }
