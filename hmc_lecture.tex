@@ -29,6 +29,7 @@
 \newcommand{\bmomentum}{\bm{\momentum}}
 \newcommand{\Position}{\Theta}
 \newcommand{\Momentum}{P}
+\newcommand{\Mass}{\bm{M}}
 \newcommand{\integrationTime}{\tau}
 \newcommand{\pathlen}{L}
 \newcommand{\stepsize}{\Delta t}
@@ -41,6 +42,7 @@
 \newcommand{\Diff}{\mathbf{D}}
 
 % Probability / statistics macros
+\newcommand{\eqDistribution}{\mathrel{\raisebox{-.2ex}{$\overset{\scalebox{.6}{$\, d$}}{=}$}}}
 \newcommand{\given}{\, | \,}
 \newcommand{\normal}{\mathcal{N}}
 \newcommand{\proposalKernel}{Q}
@@ -490,7 +492,7 @@
 	\end{itemize}
 }
 
-\subsection{Summary}
+\subsection{Summary \& 2nd look at HMC algorithm}
 
 \frame{
 	\frametitle{Summary: theory of HMC}
@@ -504,6 +506,78 @@
 		\hspace*{2em} $\Rightarrow$ Invariance of the target under Hamiltonian dynamics \\
 		\hspace*{5em} $\Rightarrow$ High acceptance rate of HMC proposals
 	\end{itemize}
+}
+
+\frame{
+	\frametitle{Another look at HMC transition kernel}
+	\vspace{-.3\baselineskip}
+	\begin{itemize}
+	\item Having covered details, we now state the algorithm more precisely.
+		\begin{itemize}
+		\item \textit{Mass matrix} $\Mass$ does not need to be proportional to the identity.
+		\item Momentum flip is optional since $\pi(\bposition, \bmomentum) = \pi(\bposition, -\bmomentum)$.
+		\end{itemize}
+	\end{itemize}
+	\vspace{-.3\baselineskip}
+	\begin{block}{HMC transition rule}
+		Given the current state $(\bposition_0, \bmomentum_0)$, HMC generates the next state as follows:
+		\begin{enumerate}
+			\item Randomize momentum: $\bmomentum_0 \sim \mathcal{N}\left(\mathbf{0}, \textcolor{lava}{\Mass} \right)$.
+			\item Generate a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime), \textcolor{lava}{\pm} \bmomentum(\integrationTime))$ \textcolor{lava}{by using the leapfrog integrator} to approximate the solution of Hamilton's equation
+				\vspace{-.5\baselineskip}
+				\begin{equation}
+				\vspace{-.5\baselineskip}
+				\begin{aligned}
+				\frac{\diff \bposition}{\diff t} 
+				&= \textcolor{lava}{\Mass^{-1}} \bmomentum, \quad
+				\frac{\diff \bmomentum}{\diff t} 
+				= - \nabla_{\bposition} U(\bposition) 
+				\end{aligned}
+				\end{equation}
+				with initial condition $(\bposition(0), \bmomentum(0)) = (\bposition_0, \bmomentum_0)$.
+			\item Accept or reject the proposal \textcolor{lava}{with the acceptance probability
+				\begin{itemizedEquation*}
+				\min\left\{1, \pi(\bposition^*, \bmomentum^*) / \pi(\bposition, \bmomentum) \right\}.
+				\end{itemizedEquation*}
+				} \vspace{-\baselineskip}
+		\end{enumerate}
+	\end{block}
+}
+
+\frame{
+	\frametitle{Another look at HMC transition kernel}
+	\vspace{-.3\baselineskip}
+	\begin{itemize}
+	\item Same theories justify a  more general version below.
+		\begin{itemize}
+		\item Any symmetric, potentially position-dependent, distribution can be employed for momentum: $- \bmomentum \given \bposition \eqDistribution \bmomentum \given \bposition \sim \pi_{\Momentum \given \Position}(\, \cdot \given \bposition)$.
+		\item Note: a \textit{symplectic} integrator is reversible and volume-preserving.
+		\end{itemize}
+	\end{itemize}
+	\vspace{-.3\baselineskip}
+	\begin{block}{HMC transition rule}
+		Given the current state $(\bposition_0, \bmomentum_0)$, HMC generates the next state as follows:
+		\begin{enumerate}
+			\item Randomize momentum: \textcolor{lava}{$\bmomentum_0 \given \bposition_0 \sim \pi_{\Momentum \given \Position}(\, \cdot \given \bposition_0)$}.
+			\item Generate a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime),  \bmomentum(\integrationTime))$ by using \textcolor{lava}{a reversible and volume-preserving integrator} to solve Hamilton's equation
+				\vspace{-.5\baselineskip}
+				\begin{equation}
+				\vspace{-.5\baselineskip}
+				\begin{aligned}
+				\frac{\diff \bposition}{\diff t} 
+				&= \textcolor{lava}{\nabla_{\bmomentum} K(\bposition, \bmomentum)}, \quad
+				\frac{\diff \bmomentum}{\diff t} 
+				= - \nabla_{\bposition} U(\bposition) 
+				\end{aligned}
+				\end{equation}
+				with initial condition $(\bposition(0), \bmomentum(0)) = (\bposition_0, \bmomentum_0)$.
+			\item Accept or reject the proposal with the acceptance probability
+				\begin{itemizedEquation*}
+				\min\left\{1, \pi(\bposition^*, \bmomentum^*) / \pi(\bposition, \bmomentum) \right\}.
+				\end{itemizedEquation*}
+				 \vspace{-\baselineskip}
+		\end{enumerate}
+	\end{block}
 }
 
 
