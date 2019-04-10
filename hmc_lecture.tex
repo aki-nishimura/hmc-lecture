@@ -110,12 +110,11 @@
 \beamertemplatenavigationsymbolsempty
 
 % Insert table of content frames between sections automatically. See http://en.wikibooks.org/wiki/LaTeX/Presentations
-\AtBeginSection[]
+\AtBeginSubsection[]
 {
   \begin{frame}
     \frametitle{Table of Contents}
-    \tableofcontents[currentsection]
-    %    \tableofcontents[currentsection, currentsubsection]
+    \tableofcontents[currentsection, currentsubsection]
   \end{frame}
 }
 
@@ -129,10 +128,13 @@
 \frame{\titlepage}
 
 
-\section{Why \& What to learn about Hamiltonian Monte Carlo}
+\section{Introducing Hamiltonian Monte Carlo (HMC)}
+
+
+\subsection{Why \& What to learn about HMC}
 
 \frame{
-	\frametitle{What is Hamiltonian Monte Carlo (HMC)?}
+	\frametitle{What is HMC?}
 	\begin{itemize}
 	\item HMC is a state-of-the-art \textit{general-purpose} sampler, only requiring evaluation of the target log-density and its gradient.
 	\item Required computations can be done algorithmically and efficiently for probabilistic models (or, more precisely, Bayesian networks):
@@ -199,7 +201,7 @@
 }
 
 
-\section{History and Motivation behind HMC}
+\subsection{History \& Motivation behind HMC}
 
 \frame{
 	\frametitle{History of ``H''MC}
@@ -241,7 +243,7 @@
 }
 
 
-\section{Title TBD}
+\subsection{First look at HMC algorithm}
 
 \frame{
 	\frametitle{Set-up and terminologies for HMC}	
@@ -320,7 +322,9 @@
 }
 
 
-\section{Theory of HMC: exactness (at stationarity) \& high acceptance rates}
+\section{Theory of HMC: exactness \& high acceptance rate}
+
+\subsection{Exactness of HMC at stationarity}
 
 \frame{
 	\frametitle{HMC as a valid Metropolis algorithm}
@@ -403,8 +407,10 @@
 	\end{itemize}
 }
 
+\subsection{High acceptance rate of HMC proposals}
+
 \frame{
-	\frametitle{High acceptance rate of HMC proposals}
+	\frametitle{Invariance of the target under Hamiltonian dynamics}
 	\begin{itemize}
 	\item If we could solve Hamiltonian dynamics exactly, then HMC proposals would have $100\%$ (!) acceptance rates.
 	\item In essence, this is because the target $\pi(\cdot, \cdot)$ is an \textit{invariant} distribution of the dynamics --- if $(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$, then $\solutionOp_t(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$ for all $t$.
@@ -414,7 +420,7 @@
 }
 
 \frame{
-	\frametitle{Acceptance probability of proposals via reversible map}
+	\frametitle{Acceptance probability of reversible map proposals}
 	\begin{itemize}
 	\item For a general reversible map $\solutionOp$, the correct acceptance probability of a proposal $(\bposition^*, \bmomentum^*) = \solutionOp(\bposition, \bmomentum)$ is given by 
 		\begin{itemizedEquation*}
@@ -479,6 +485,8 @@
 		\end{itemizedEquation*}
 	\end{itemize}
 }
+
+\subsection{Summary}
 
 \frame{
 	\frametitle{Summary: theory of HMC}
