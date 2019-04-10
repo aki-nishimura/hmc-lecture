@@ -46,6 +46,8 @@
 \newcommand{\given}{\, | \,}
 \newcommand{\normal}{\mathcal{N}}
 \newcommand{\proposalKernel}{Q}
+\newcommand{\indep}{\protect\mathpalette{\protect\independenT}{\perp}}
+\def\independenT#1#2{\mathrel{\rlap{$#1#2$}\mkern2mu{#1#2}}}
 
 % Variable / Greek symbol macros
 \newcommand{\y}{\bm{y}}
@@ -586,7 +588,41 @@
 
 \section{Case study: HMC on Gaussian targets}
 
+
 \subsection{With exact Hamiltonian dynamics}
+
+\frame{
+	\frametitle{HMC on Gaussian targets}
+	\begin{itemize}
+	\item As explained later, HMC's performance on multivariate Gaussians can be understood via its behavior on a $1$-d Gaussian with mass $m = 1$.
+	\item So we study HMC's behavior for $\position \sim \normal(0, \sigma^2)$ and $\momentum \sim \normal(0, 1)$, or
+		\begin{itemizedEquation*}
+		U(\position) =  \frac{\position^2}{2 \sigma^2}, \ \
+		K(\momentum) =  \frac{\momentum^2}{2}.
+		\end{itemizedEquation*}
+	\item Corresponding dynamics is described by
+		\begin{itemizedEquation*}
+		\frac{\diff \position}{\diff t} = \momentum, \ \
+		\frac{\diff \momentum}{\diff t} = - \frac{\position}{\sigma^2}
+			\ \ \text{ or equivalently } \ \
+			\frac{\diff^2 \position}{\diff t^2} = - \frac{\position}{\sigma^2}
+			.
+		\end{itemizedEquation*}
+	\item Solution coincides a harmonic oscillator with period $2 \pi \sigma$:
+		\begin{itemizedEquation*}
+		\position(t) 
+			= \position_0 \cos(t / \sigma) + \momentum_0 \, \sigma \sin(t / \sigma).
+			% , \ \ \momentum(t) = \dot{\position}(t)
+		\end{itemizedEquation*}
+	\item If $\position_0 \sim \normal(0, \sigma^2)$ and $\momentum_0 \sim \normal(0, 1)$, then $\position(t) \sim \normal(0, \sigma^2)$ for all $t$ and
+		\begin{itemizedEquation*}
+		\position(\integrationTime) 
+			= \momentum_0 \, \sigma 
+			\indep \position_0
+			\ \text{ for } \ \integrationTime = \pi \sigma / 2.
+		\end{itemizedEquation*}
+	\end{itemize}
+}
 
 \subsection{With leapfrog integrator dynamics}
 
