@@ -85,6 +85,9 @@
 \definecolor{turquoise}{rgb}{0.19, 0.84, 0.78}
 \definecolor{mediumturquoise}{rgb}{0.28, 0.82, 0.8}
 \definecolor{lava}{rgb}{0.81, 0.06, 0.13}
+\colorlet{linkColor}{mediumturquoise}
+\colorlet{highlightedTextColor}{lava}
+
 
 % Set the color theme of the presentation
 \usecolortheme[named=uclablue]{structure}
@@ -320,10 +323,10 @@
 \frame{
 	\frametitle{Visual illustration: HMC in action}
 	\begin{center}
-	\href{run:Figure/hmc_in_action_2d_Gaussian.avi}{\color{mediumturquoise} \fontsize{16pt}{18pt} \selectfont HMC for a 2d Gaussian (correlation $= 0.9$)}
+	\href{run:Figure/hmc_in_action_2d_Gaussian.avi}{\color{linkColor} \fontsize{16pt}{18pt} \selectfont HMC for a 2d Gaussian (correlation $= 0.9$)}
 	\vspace{4ex}
 
-	\href{run:Figure/hmc_in_action_2d_Gaussian_slow_motion.avi}{\color{mediumturquoise} \fontsize{16pt}{18pt} \selectfont Click here for slow motion version}
+	\href{run:Figure/hmc_in_action_2d_Gaussian_slow_motion.avi}{\color{linkColor} \fontsize{16pt}{18pt} \selectfont Click here for slow motion version}
 	\end{center}
 }
 
@@ -484,7 +487,7 @@
 		\end{itemizedEquation*}
 		% Note: we have an actual bound $E[\Delta H] \leq E[\Delta H^2]$ for a reversible dynamics-based proposal.
 		% Note: the above relation holds for any Metropolis type algorithm
-	\item HMC proposals thus satisfies $\mathbb{E}[\Delta H] = O(\stepsize^{\textcolor{lava}{4}})$ as $\stepsize \to 0$.
+	\item HMC proposals thus satisfies $\mathbb{E}[\Delta H] = O(\stepsize^{\textcolor{highlightedTextColor}{4}})$ as $\stepsize \to 0$.
 	\item e.g.\ HMC generates one effective sample from $\nparam$-dimensional Gaussians with the cost of
 		\begin{itemizedEquation*}
 		\nparam^{1 / 4} \times \text{(cost of likelihood \& gradient evaluation)}.
@@ -522,20 +525,20 @@
 	\begin{block}{HMC transition rule}
 		Given the current state $(\bposition_0, \bmomentum_0)$, HMC generates the next state as follows:
 		\begin{enumerate}
-			\item Randomize momentum: $\bmomentum_0 \sim \mathcal{N}\left(\mathbf{0}, \textcolor{lava}{\Mass} \right)$.
-			\item Generate a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime), \textcolor{lava}{\pm} \bmomentum(\integrationTime))$ \textcolor{lava}{by using the leapfrog integrator} to approximate the solution of Hamilton's equation
+			\item Randomize momentum: $\bmomentum_0 \sim \mathcal{N}\left(\mathbf{0}, \textcolor{highlightedTextColor}{\Mass} \right)$.
+			\item Generate a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime), \textcolor{highlightedTextColor}{\pm} \bmomentum(\integrationTime))$ \textcolor{highlightedTextColor}{by using the leapfrog integrator} to approximate the solution of Hamilton's equation
 				\vspace{-.5\baselineskip}
 				\begin{equation}
 				\vspace{-.5\baselineskip}
 				\begin{aligned}
 				\frac{\diff \bposition}{\diff t} 
-				&= \textcolor{lava}{\Mass^{-1}} \bmomentum, \quad
+				&= \textcolor{highlightedTextColor}{\Mass^{-1}} \bmomentum, \quad
 				\frac{\diff \bmomentum}{\diff t} 
 				= - \nabla_{\bposition} U(\bposition) 
 				\end{aligned}
 				\end{equation}
 				with initial condition $(\bposition(0), \bmomentum(0)) = (\bposition_0, \bmomentum_0)$.
-			\item Accept or reject the proposal \textcolor{lava}{with the acceptance probability
+			\item Accept or reject the proposal \textcolor{highlightedTextColor}{with the acceptance probability
 				\begin{itemizedEquation*}
 				\min\left\{1, \pi(\bposition^*, \bmomentum^*) / \pi(\bposition, \bmomentum) \right\}.
 				\end{itemizedEquation*}
@@ -558,14 +561,14 @@
 	\begin{block}{HMC transition rule}
 		Given the current state $(\bposition_0, \bmomentum_0)$, HMC generates the next state as follows:
 		\begin{enumerate}
-			\item Randomize momentum: \textcolor{lava}{$\bmomentum_0 \given \bposition_0 \sim \pi_{\Momentum \given \Position}(\, \cdot \given \bposition_0)$}.
-			\item Generate a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime),  \bmomentum(\integrationTime))$ by using \textcolor{lava}{a reversible and volume-preserving integrator} to solve Hamilton's equation
+			\item Randomize momentum: \textcolor{highlightedTextColor}{$\bmomentum_0 \given \bposition_0 \sim \pi_{\Momentum \given \Position}(\, \cdot \given \bposition_0)$}.
+			\item Generate a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime),  \bmomentum(\integrationTime))$ by using \textcolor{highlightedTextColor}{a reversible and volume-preserving integrator} to solve Hamilton's equation
 				\vspace{-.5\baselineskip}
 				\begin{equation}
 				\vspace{-.5\baselineskip}
 				\begin{aligned}
 				\frac{\diff \bposition}{\diff t} 
-				&= \textcolor{lava}{\nabla_{\bmomentum} K(\bposition, \bmomentum)}, \quad
+				&= \textcolor{highlightedTextColor}{\nabla_{\bmomentum} K(\bposition, \bmomentum)}, \quad
 				\frac{\diff \bmomentum}{\diff t} 
 				= - \nabla_{\bposition} U(\bposition) 
 				\end{aligned}
