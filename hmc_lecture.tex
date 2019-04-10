@@ -626,6 +626,82 @@
 
 \subsection{With leapfrog integrator dynamics}
 
+\frame{
+	\frametitle{Leapfrog dynamics \& stability limit on integrator stepsize}
+	\begin{itemize}
+	\item In case of a Gaussian target, one leapfrog can be expressed as
+		\begin{itemizedEquation*}
+		\begin{bmatrix}
+		\bposition_{n \stepsize} \\ \bmomentum_{n \stepsize}
+		\end{bmatrix}
+			= 
+			{\def\arraystretch{1.5}
+			\begin{bmatrix}
+			1 - \frac{\stepsize^2}{2 \sigma^2} & \stepsize \\
+			- \frac{\stepsize}{\sigma^2} + \frac{\stepsize^3}{4 \sigma^4} & 1 - \frac{\stepsize^2}{2 \sigma^2}
+			\end{bmatrix}
+			}
+			\begin{bmatrix}
+			\bposition_{(n - 1) \stepsize} \\ \bmomentum_{(n - 1) \stepsize}
+			\end{bmatrix}.
+		\end{itemizedEquation*}
+	\item Eigenvalues of the leapfrog map $\solutionOp_{\stepsize}$ have magnitude $< 1$ if and only if the stepsize is within the \textit{stability region} $\stepsize < 2 \sigma$.
+	\item For $\stepsize > 2 \sigma$, the acceptance rate effectively drops to 0.
+	\item For $\stepsize < 2 \sigma$, we have the following formula for $\solutionOp_{\stepsize}^n$:
+		\begin{itemizedEquation*}
+		\begin{bmatrix}
+		\bposition_{n \stepsize} \\ \bmomentum_{n \stepsize}
+		\end{bmatrix}
+			= 
+			\arraycolsep=0pt
+			\begin{bmatrix}
+			\cos(n \phi) 
+				& \sigma \left( 1 - \frac{\stepsize^2}{4 \sigma^2} \right)^{\text{\tiny $-1/2$}} \sin(n \phi) \\
+			- \frac{1}{\sigma} \left( 1 - \frac{\stepsize^2}{4 \sigma^2} \right)^{\text{\tiny $1/2$}} \sin(n \phi) 
+				& \cos(n \phi)
+			\end{bmatrix}	
+			\begin{bmatrix}
+			\bposition_{0} \\ \bmomentum_{0}
+			\end{bmatrix}
+		\end{itemizedEquation*}
+		where $\phi = \cos^{-1}\!\left( 1 - \frac{\stepsize^2}{2 \sigma^2} \right)$.
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Acceptance rate  / Hamiltonian error as function of stepsize}
+	\begin{itemize}
+	\item Acceptance probability is given as $\min\{1, \exp(-\Delta H)\}$ where 
+		\begin{itemizedEquation*}
+		\Delta H 
+			= - \log \frac{
+					\pi(\bposition_{L \stepsize},  \bmomentum_{L \stepsize})
+				}{
+					\pi(\bposition_{0},  \bmomentum_{0})
+				}.
+		\end{itemizedEquation*}
+	\item After tedious calculation, we can show that
+		\begin{itemizedEquation*}
+		\mathbb{E} \left[ \Delta H \right]
+			= \frac{\stepsize^4}{\sigma^4} 
+				\left( 1 - \frac{\stepsize^2}{4 \sigma^2} \right)^{-1}
+				\frac{\sin^2(L \phi)}{32}.
+		\end{itemizedEquation*}
+	\end{itemize}
+	\begin{figure}
+	\centering
+		\begin{minipage}{.5\linewidth}
+		\includegraphics[height=.4\textheight]{Figure/ave_hamiltonian_error_on_gaussian_target}
+		\end{minipage}
+		\begin{minipage}{.425\linewidth}
+		\vspace{-\baselineskip}
+		\caption{Average Hamiltonian error $\mathbb{E} \left[ \Delta H \right]$ as a function of $\stepsize$ \\ when $\integrationTime = 2 \pi \sigma$ and $L = \lceil \integrationTime / \stepsize \rceil$.}
+		\end{minipage}
+	\end{figure}
+}
+
+% TODO: discuss a multivariate case.
+
 
 
 \section{Tuning HMC: theory and practice}
