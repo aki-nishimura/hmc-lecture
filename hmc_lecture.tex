@@ -31,7 +31,7 @@
 \newcommand{\Momentum}{P}
 \newcommand{\Mass}{\bm{M}}
 \newcommand{\integrationTime}{\tau}
-\newcommand{\pathlen}{L}
+\newcommand{\nIntegrationStep}{L}
 \newcommand{\stepsize}{\Delta t}
 \newcommand{\solutionOp}{\bm{\Psi}}
 \newcommand{\involution}{\bm{R}}
@@ -414,7 +414,7 @@
 			&-& \displaystyle \frac{\stepsize}{2} \nabla U(\bposition_{t + \stepsize}).
 		\end{array}
 		\end{itemizedEquation*}
-	\item Map $\solutionOp_{\stepsize}^\pathlen$ induced by $\pathlen(\tau) = \lfloor \tau / \stepsize \rfloor$ steps of the leapfrog updates approximate the exact evolution from time $t = 0$ to $t = \integrationTime$. 
+	\item Map $\solutionOp_{\stepsize}^\nIntegrationStep$ induced by $\nIntegrationStep(\tau) = \lfloor \tau / \stepsize \rfloor$ steps of the leapfrog updates approximate the exact evolution from time $t = 0$ to $t = \integrationTime$. 
 	\end{itemize}
 }
 
@@ -425,7 +425,7 @@
 	\begin{itemize}
 	\item If we could solve Hamiltonian dynamics exactly, then HMC proposals would have $100\%$ (!) acceptance rates.
 	\item In essence, this is because the target $\pi(\cdot, \cdot)$ is an \textit{invariant} distribution of the dynamics --- if $(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$, then $\solutionOp_t(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$ for all $t$.
-	\item With numerical approximation, acceptance rate of HMC proposals  converges to 1 as $\stepsize \to 0$ for a fixed $\tau$ and $\pathlen(\tau) = \lfloor \tau / \stepsize \rfloor$.
+	\item With numerical approximation, acceptance rate of HMC proposals  converges to 1 as $\stepsize \to 0$ for a fixed $\tau$ and $\nIntegrationStep(\tau) = \lfloor \tau / \stepsize \rfloor$.
 		% TODO : later provide a more quantitative discussion of the error as a function of stepsize.
 	\end{itemize}
 }
@@ -450,7 +450,7 @@
 				= \pi_{\Position, \, \Momentum}(\bposition, \bmomentum) \left| \Diff \solutionOp(\bposition, \bmomentum) \right|^{-1}.
 			\end{itemizedEquation*}
 		\end{itemize}
-	\item Hamiltonian dynamics and its leapfrog approximation are both volume-preserving, meaning $\left| \Diff \solutionOp_{\integrationTime} \right| = \left| \Diff \solutionOp_{\stepsize}^\pathlen \right| = 1$.
+	\item Hamiltonian dynamics and its leapfrog approximation are both volume-preserving, meaning $\left| \Diff \solutionOp_{\integrationTime} \right| = \left| \Diff \solutionOp_{\stepsize}^\nIntegrationStep \right| = 1$.
 	\item Hence, the acceptance probability of an HMC proposal is
 		\begin{itemizedEquation*}
 		\min \! \left\{
@@ -478,7 +478,7 @@
 	\item With the leapfrog approximation for a fixed $\integrationTime$,  the error is
 		\begin{itemizedEquation*}
 		\Delta H
-			= H(\bposition_{L \stepsize}, \bmomentum_{L \stepsize})
+			= H(\bposition_{\nIntegrationStep \stepsize}, \bmomentum_{\nIntegrationStep \stepsize})
 				- H(\bposition_{0}, \bmomentum_{0})
 			= O(\stepsize^2).
 		\end{itemizedEquation*}
@@ -679,7 +679,7 @@
 		\begin{itemizedEquation*}
 		\Delta H 
 			= - \log \frac{
-					\pi(\bposition_{L \stepsize},  \bmomentum_{L \stepsize})
+					\pi(\bposition_{\nIntegrationStep \stepsize},  \bmomentum_{\nIntegrationStep \stepsize})
 				}{
 					\pi(\bposition_{0},  \bmomentum_{0})
 				}.
@@ -689,7 +689,7 @@
 		\mathbb{E} \left[ \Delta H \right]
 			= \frac{\stepsize^4}{\sigma^4} 
 				\left( 1 - \frac{\stepsize^2}{4 \sigma^2} \right)^{-1}
-				\frac{\sin^2(L \phi)}{32}.
+				\frac{\sin^2(\nIntegrationStep \phi)}{32}.
 		\end{itemizedEquation*}
 	\end{itemize}
 	\begin{figure}
@@ -699,7 +699,7 @@
 		\end{minipage}
 		\begin{minipage}{.425\linewidth}
 		\vspace{-\baselineskip}
-		\caption{Average Hamiltonian error $\mathbb{E} \left[ \Delta H \right]$ as a function of $\stepsize$ \\ when $\integrationTime = 2 \pi \sigma$ and $L = \lceil \integrationTime / \stepsize \rceil$.}
+		\caption{Average Hamiltonian error $\mathbb{E} \left[ \Delta H \right]$ as a function of $\stepsize$ \\ when $\integrationTime = 2 \pi \sigma$ and $\nIntegrationStep = \lceil \integrationTime / \stepsize \rceil$.}
 		\end{minipage}
 	\end{figure}
 }
