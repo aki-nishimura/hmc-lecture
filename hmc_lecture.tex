@@ -651,6 +651,12 @@
 		\end{itemizedEquation*}
 	\item Eigenvalues of the leapfrog map $\solutionOp_{\stepsize}$ have magnitude $< 1$ if and only if the stepsize is within the \textit{stability region} $\stepsize < 2 \sigma$.
 	\item For $\stepsize > 2 \sigma$, the acceptance rate effectively drops to 0.
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Leapfrog dynamics \& stability limit on integrator stepsize}
+	\begin{itemize}
 	\item For $\stepsize < 2 \sigma$, we have the following formula for $\solutionOp_{\stepsize}^n$:
 		\begin{itemizedEquation*}
 		\begin{bmatrix}
@@ -668,7 +674,14 @@
 			\bposition_{0} \\ \bmomentum_{0}
 			\end{bmatrix}
 		\end{itemizedEquation*}
-		where $\phi = \cos^{-1}\!\left( 1 - \frac{\stepsize^2}{2 \sigma^2} \right)$.
+		where $\phi = \phi(\stepsize / \sigma) = \cos^{-1}\!\left( 1 - \frac{\stepsize^2}{2 \sigma^2} \right)$.
+	\item Since $\cos^{-1}(1 - \delta^2 / 2) \approx \delta$, we have $ n \phi \approx n \stepsize / \sigma$ as $\stepsize / \sigma \to 0$.
+	\item For $\stepsize$ sufficiently small, a choice $\nIntegrationStep \approx \frac{\pi \sigma}{2 \stepsize}$ yields
+		\begin{itemizedEquation*}
+		\cos(L \phi) \approx 0
+			\ \text{ \& } \sin(L \phi) \approx 1
+		\end{itemizedEquation*}
+	and the proposal $(\bposition_{\nIntegrationStep \stepsize},  \bmomentum_{\nIntegrationStep \stepsize})$ approximately independent of $(\bposition_{0},  \bmomentum_{0})$. 
 	\end{itemize}
 }
 
