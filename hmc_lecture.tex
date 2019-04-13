@@ -598,10 +598,9 @@
 }
 
 \frame{
-	\frametitle{HMC on Gaussian targets}
+	\frametitle{HMC on univariate Gaussian target}
 	\begin{itemize}
-	\item As explained later, HMC's performance on multivariate Gaussians can be understood via its behavior on a $1$-d Gaussian with mass $m = 1$.
-	\item So we study HMC's behavior for $\position \sim \normal(0, \sigma^2)$ and $\momentum \sim \normal(0, 1)$, or
+	\item We first consider HMC's behavior for $\position \sim \normal(0, \sigma^2)$, $\momentum \sim \normal(0, 1)$ or
 		\begin{itemizedEquation*}
 		U(\position) =  \frac{\position^2}{2 \sigma^2}, \ \
 		K(\momentum) =  \frac{\momentum^2}{2}.
@@ -620,7 +619,7 @@
 			= \position_0 \cos(t / \sigma) + \momentum_0 \, \sigma \sin(t / \sigma).
 			% , \ \ \momentum(t) = \dot{\position}(t)
 		\end{itemizedEquation*}
-	\item If $\position_0 \sim \normal(0, \sigma^2)$ and $\momentum_0 \sim \normal(0, 1)$, then $\position(t) \sim \normal(0, \sigma^2)$ for all $t$ and
+	\item If $\position_0 \sim \normal(0, \sigma^2)$ and $\momentum_0 \sim \normal(0, 1)$, then $\position(t) \sim \normal(0, \sigma^2)$ for all $t$ and \vspace{-.7\baselineskip}
 		\begin{itemizedEquation*}
 		\position(\integrationTime) 
 			= \momentum_0 \, \sigma 
@@ -717,7 +716,50 @@
 	\end{figure}
 }
 
-% TODO: discuss a multivariate case.
+\frame{
+	\frametitle{HMC on multivariate Gaussians}
+	\begin{itemize}
+	\item Consider the target $\bposition \sim \normal(\bm{0}, \bm{\Sigma})$, $\bmomentum \sim \normal(\bm{0}, \I)$.
+	\item With the identity mass, HMC's performance turns out to be invariant under rotation of the parameter i.e.\ we can assume that $\bSigma$ is diagonal.
+	\item With $U(\bposition) = \sum_{i = 1}^\nparam \frac{\position_i}{2 \sigma_i^2}$ and $K(\bmomentum) = \sum_{i = 1}^\nparam \frac{p_i^2}{2}$, Hamilton's equation decouples into $\nparam$ independent one-dimensional equations:
+		\begin{itemizedEquation*}
+		\frac{\diff \position_i}{\diff t} = \momentum_i, \ \
+		\frac{\diff \momentum_i}{\diff t} = - \frac{\position_i}{\sigma_i^2}
+			\ \ \text{ for } \ \
+			i = 1, \ldots, \nparam.
+		\end{itemizedEquation*}
+	\item Leapfrog update also decouples into one-dimensional updates:
+		\begin{itemize}
+		\item Direction with the \textit{smallest} variance determines the overall stability limit of $\stepsize < 2 \min_i \sigma_i$.
+		\item Direction with the \textit{largest} variance determines the necessary number of leapfrog steps $L \approx \frac{\pi}{2 \stepsize} \max_i \sigma_i$.
+		\item Error accumulates over the coordinates: $\Delta H = \sum_i \Delta H_i$.
+		\end{itemize} 
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Computational cost of HMC on multivariate Guassians}
+	\begin{itemize}
+	\item Computational cost is $\propto L \propto \frac{\sigma_{\max}}{\stepsize}$. What $\stepsize$ to use?
+	\item Stability limit is $\stepsize < 2 \sigma_{\min}$, but $\Delta H$ needs to be controlled too.
+	\item In an extreme case $\sigma_i = \sigma_0$ for all $i$'s, we have
+		\begin{itemizedEquation*}
+		\mathbb{E}\left[ \Delta H \right]
+			= \nparam \times \mathbb{E} \left[ \Delta H_1 \right]
+			\propto \nparam \times \stepsize^4.
+		\end{itemizedEquation*}
+		\vspace{-\baselineskip}
+		\begin{itemize}
+		\item Need $\Delta t \propto d^{-1/4}$ to maintain a positive acceptance rate.
+		\item Computational costs becomes $\propto \sigma_{\max} \, d^{1 / 4}$.
+		\end{itemize}
+	\item In another extreme case $\sigma_{\min} \ll \sigma_i$ for $i \neq \arg\!\min_j \sigma_j$, the error is completely dominated by $\Delta H_{\arg\!\min_i \sigma_i}$. 
+		\begin{itemize}
+		\item Since $\mathbb{E} \left[ \Delta H_i \right] \propto \stepsize / \sigma_i$ and $\stepsize < 2 \sigma_{\min}$, there are little contributions to the overall error from $\Delta H_i$ for $i \neq \arg\!\min_j \sigma_j$. 
+		\item Computational costs becomes $\propto \sigma_{\max} / \sigma_{\min}$ --- the ratio \\ between the largest and smallest ``widths'' of the target.
+		\end{itemize}
+	\end{itemize}
+}
 
 
 
