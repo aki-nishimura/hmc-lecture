@@ -41,6 +41,8 @@
 \newcommand{\transpose}{\text{\raisebox{.5ex}{$\intercal$}}}
 \newcommand{\diff}{{\rm d}}
 \newcommand{\Diff}{\mathbf{D}}
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
 
 % Probability / statistics macros
 \newcommand{\eqDistribution}{\mathrel{\raisebox{-.2ex}{$\overset{\scalebox{.6}{$\, d$}}{=}$}}}
@@ -771,9 +773,9 @@
 		\item Need $\Delta t \propto d^{-1/4}$ to maintain a positive acceptance rate.
 		\item Computational costs becomes $\propto \sigma_{\max} \, d^{1 / 4}$.
 		\end{itemize}
-	\item In another extreme case $\sigma_{\min} \ll \sigma_i$ for $i \neq \arg\!\min_j \sigma_j$, the error is completely dominated by $\Delta H_{\arg\!\min_i \sigma_i}$. 
+	\item In another extreme case $\sigma_{\min} \ll \sigma_i$ for $i \neq \argmin_j \sigma_j$, the error is completely dominated by $\Delta H_{\argmin_i \sigma_i}$. 
 		\begin{itemize}
-		\item Since $\mathbb{E} \left[ \Delta H_i \right] \propto \stepsize / \sigma_i$ and $\stepsize < 2 \sigma_{\min}$, there are little contributions to the overall error from $\Delta H_i$ for $i \neq \arg\!\min_j \sigma_j$. 
+		\item Since $\mathbb{E} \left[ \Delta H_i \right] \propto \stepsize / \sigma_i$ and $\stepsize < 2 \sigma_{\min}$, there are little contributions to the overall error from $\Delta H_i$ for $i \neq \argmin_j \sigma_j$. 
 		\item Computational costs becomes $\propto \sigma_{\max} / \sigma_{\min}$ --- the ratio \\ between the largest and smallest ``widths'' of the target.
 		\end{itemize}
 	\end{itemize}
