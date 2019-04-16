@@ -259,8 +259,8 @@
 		\end{itemize}
 	\item e.g.\ random-walk Metropolis for $\nparam$-dimensional Gaussians:
 		\begin{itemize}
-		\item Proposal variance needs to be $O\big(d^{-1}\big)$ for $O(1)$ acceptance rate.
-		\item It takes $\nparam$ steps for the chain to travel $O(1)$ distance.
+		\item Proposal variance needs to be $O\big(d^{-1}\big)$ to maintain a positive acceptance rate.
+		\item It takes $\nparam$ steps for the chain to travel a unit distance.
 		\item The cost of generating one effective sample is proportional to
 			\begin{itemizedEquation*}
 			\nparam \times \text{(cost of likelihood evaluation)}. 
