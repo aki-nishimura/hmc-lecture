@@ -818,6 +818,37 @@
 	\end{itemize} 
 }
 
+\frame{
+	\frametitle{Mass matrix for linear parameter transformation}
+	\begin{itemize}
+	\item \textbf{Fact :} HMC's performance remains identical whether sampling from the (joint) parameter space $(\bm{A} \bposition, \bmomentum)$ and from $(\bposition, \bm{A}^\transpose \bmomentum)$.
+	\item When using the identity mass $\Mass = \I$, 
+		\begin{itemize}
+		\item the computational cost tends to increase as the ratio between the largest and smallest ``widths'' of the target does.
+		\item (linear) reparametrization $\bposition \to \bSigma^{-1/2} \bposition$ for $\bSigma = \text{Var}(\bposition)$ often improves the efficiency.
+		\end{itemize}
+	\item In other words, we expect HMC to perform best when sampling from the transformed parameter $\bSigma^{-1/2} \bposition$ with $\bmomentum \sim \normal(\bm{0}, \I)$.
+	\item Equivalently, we can sample from the original parameter $\bposition$ but with a transformed momentum $\bSigma^{1/2} \bmomentum \sim \normal(\bm{0}, \Mass = \bSigma)$.
+	\item Summary: choose $\Mass = \text{Var}(\bposition)$ to sample effectively from $\bSigma^{-1/2} \bposition$.
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Tuning mass matrix in practice}
+	\begin{itemize}
+	\item In real-life, reparametrization $\bSigma^{-1/2} \bposition$ may not be optimal e.g.\ a target can have the identity covariance with all sorts of complex geometries.
+	\item When $\pi_\Position(\bposition)$ is log-concave, the Hessian of $- \log \pi_\Position(\bposition)$ is a locally optimal choice for the mass matrix.
+		% Note: information theory backs up this statement to an extent, but to my knowledge this is not a proven statement.
+	\item What about more general cases? Who knows \shrug.
+	\item But let's say we aim for $\Mass = \text{Var}(\bposition)$ as commonly done.
+		\begin{itemize}
+		\item $\bSigma$ can be estimated during the ``warm-up \!/\! burn-in'' period.
+		\item Empirical covariance is unstable in high-dimensions; we may estimate the marginal variances only and set $\Mass = \textrm{diag}(\bm{\widehat{\Sigma}})$.
+		\item As the non-identity mass has an effect of implicit transformation $\bposition \to \Mass^{-1/2} \bposition$, choice of $\Mass$ and of $\stepsize$ interact with each other.
+		\item We want to keep  the narrowest ``width'' of the distribution of $\Mass^{-1/2} \bposition$ constant, so scale $\Mass$ to have the largest eigenvalue $1$.
+		\end{itemize}
+	\end{itemize}
+}
 
 
 \end{document}
