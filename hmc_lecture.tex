@@ -11,6 +11,7 @@
 \usepackage{dsfont}
 \usepackage{subcaption}
 \usepackage{natbib}
+\usepackage{bibentry} % For \nobibliography
 \usepackage{bbm}
 \usepackage{calc}  % For widthof command
 \usepackage{xcolor}
@@ -34,6 +35,7 @@
 \newcommand{\integrationTime}{\tau}
 \newcommand{\nIntegrationStep}{L}
 \newcommand{\stepsize}{\Delta t}
+\newcommand{\acceptprob}{a}
 \newcommand{\solutionOp}{\bm{\Psi}}
 \newcommand{\involution}{\bm{R}}
 
@@ -889,5 +891,94 @@
 	\end{itemize}
 }
 
+\frame{
+	\frametitle{Tuning integrator stepsize}
+	\begin{itemize}
+	\item Acceptance rate $\acceptprob(\stepsize)$ is a reasonable and easy-to-estimate metric for tuning $\stepsize$: $\acceptprob(\stepsize) \approx 0$ $\Leftrightarrow$ $\stepsize$ too large \& $\acceptprob(\stepsize) \approx 1$ $\Leftrightarrow$ $\stepsize$ too small.
+	\item Once we specify a target acceptance rate, a stochastic optimization algorithm can be used to solve for the corresponding $\stepsize$. 
+	\item What is a good target acceptance rate?
+		\begin{itemize}
+		\item \cite{beskos2013optimal-hmc} show $0.651$ to be optimal under high-dimensional i.i.d.\ distributions.
+		\item \cite{betancourt2014hmc-stepsize} say $0.6 \sim 0.9$, with larger values more robust in practice.
+		\item Stan's default is $0.8$.
+		\item I say start with $0.9$ and further decrease $\stepsize$ when you notice frequent instability / divergence of simulated trajectories. \\
+			(Also, in situations where $0.651$ is indeed optimal, using $0.9$ instead incurs only a modest additional cost, say $40\%$.)
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Case for conservative (smaller) stepsizes}
+	\begin{itemize}
+	\item Why aim for $a(\stepsize) \geq 0.9$? \\
+		--- because real-life posteriors are often much more complex than those for which theoretically optimal acceptance rates are derived.
+	\item For a complex target distribution, a specified stepsize may appear to approximate dynamics accurately until the numerical approximation suddenly breaks down in some regions of the parameter space.
+	\item This occurs when the stability limit of the integrator varies across the parameter space. See below for an example:
+	\begin{figure}
+		\begin{minipage}{.48\linewidth}
+		\includegraphics[height=.4\textheight]{Figure/2d_funnel_distribution}
+		\end{minipage}
+		\begin{minipage}{.48\linewidth}
+		\caption{
+			Density of the target \\ 
+			\hspace*{2ex} $\position_2 \given \position_1 \sim \normal(0, \text{scale} =  \exp(\position_1))$ \\
+			\hspace*{2ex} $\position_1 \sim \normal(0, \text{scale} = 2)$. \\
+			The stability limit of the integrator is $\bposition$-dependent and is approximately $\exp(\position_1)$.
+			In this toy example, an obvious solution is to sample from $(\position_1, \position_2 / \exp(\position_1))$.
+		}
+		\end{minipage}
+	\end{figure}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Case for conservative (smaller) stepsizes}
+	\begin{itemize}
+	\item Another important point --- also related to the issue of stability limit --- is that HMC requires rather specific tail conditions.
+		% Note: if using Gaussian momentum and the leapfrog integrator. 
+	\item Example: $\pi_\Position(\position) \sim \exp(-|\position|^\alpha)$ as $\position \to \pm \infty$ 
+		\begin{itemize}
+		\item HMC is geometrically ergodic if and only if $1 \leq \alpha \leq 2$.
+		\end{itemize}
+	 \item Example: $\position \sim \textrm{Exp}(1) \geq 0$
+	 	\begin{itemize}
+	 	\item Sampling from $\position' = \log \position$ is a common practice to avoid having to deal with the constraint $\position \geq 0$. But for $\position \sim \textrm{Exp}(1)$ we  have
+ 		 	\begin{itemizedEquation*}
+ 		 	\pi_{\log \Position}(\position')
+ 		 		= \exp \left( \position' - e^{\position'} \right)
+ 		 	\end{itemizedEquation*}
+		 and HMC on $\position'$ is provably \emph{not} geometrically ergodic!
+	 	\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Practically, if not provably, small enough stepsize for HMC}
+	\begin{itemize}
+	\item Um, it sounds like HMC does \emph{not} work on many target distributions? \\
+		--- Yes, but don't worry about it.
+		\hspace*{-1ex} ...\ I mean, avoid obvious problems but otherwise proceed and later check for potential issues.
+	\item In practice, we are typically concerned with regions of highest density, not where ``$\| \bposition \| \to \infty$.''
+	\item Stability limit on $\stepsize$, if restricted to a high density region, is almost surely bounded below.
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Practically, if not provably, small enough stepsize for HMC}
+	\begin{itemize}
+	\item In other words, $\stepsize$ just need to be small enough for the integrator to remain stable within a high density region.
+	\item I know, it may not sound like an ideal solution, but theory almost never coincides with practice: get over with it.
+		\begin{itemize}
+		\item Target distributions, if potentially problematic to HMC, are likely problematic to other algorithms as well.
+			% Note: though HMC may be a bit more sensitive.
+		\end{itemize}
+	\item Reparametrization can solve, or at least alleviate, some problems.
+	\item Alternative choice of momentum distributions leads to HMC variants more robust to the numerical stability issues.
+	\end{itemize}
+}
+
+
+
+\nobibliography{hmc_lecture}
 
 \end{document}
