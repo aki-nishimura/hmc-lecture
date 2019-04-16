@@ -850,5 +850,44 @@
 	\end{itemize}
 }
 
+\frame{
+	\frametitle{Choosing integration time \\ {} \hfill \& Automating choice via No-U-turn criteria}
+	\begin{itemize}
+	\item For a Gaussian target, we saw the optimal integration time to be
+		\begin{itemizedEquation*}
+		\integrationTime \approx \frac{\pi}{2} \times \text{the target's widest ``width''}.
+		\end{itemizedEquation*}
+	\item ``$\integrationTime \propto \text{width}$'' is a useful way of thinking, but provides no practical guidance in general settings.
+	\item One possibility is to empirically calibrate $\integrationTime$ to maximize a performance metric such as an \textit{expected jumping distance}.
+	\item Reliable, generally efficient, and simpler alternative is to use the \textit{no-U-turn} algorithm to obviate the need for manually choosing $\integrationTime$.
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{No-U-turn algorithm for automating integration time}
+	\begin{itemize}
+	\item No-U-turn algorithm is often described as a version of HMC, but can be used with any reversible dynamics-based samplers.
+	\item No-U-turn sampler (NUTS) refers to HMC + No-U-turn algorithm.
+	\item \textbf{Motivation}: Trajectories of Hamiltonian dynamics, if simulated long enough, typically start turning back toward where it started. 
+		\begin{itemize}
+		\item Recall the harmonic oscillation in the Gaussian case.
+		\item More generally, $\frac{\diff \bmomentum}{\diff t} = - \nabla_{\bposition} U(\bposition)$ means that the velocity $\frac{\diff \bposition}{\diff t}$ will eventually point toward the mode of the target.
+		\end{itemize}
+	\item Simulating trajectories is likely wasteful beyond the \textit{U-turn} time
+		\begin{itemizedEquation*}
+		\begin{aligned}
+		\integrationTime_{\textsc{u}}
+			&= \min_{t > 0} \left\{
+				\frac{\diff}{\diff t} \left\| \bposition(t) - \bposition_0 \right\|^2 < 0
+			\right\} \\
+			&= \min_{t > 0} \left\{
+				\big\langle \bposition(t) - \bposition_0, \Mass^{-1} \bmomentum(t) \big\rangle < 0
+			\right\}.
+		\end{aligned}
+		\end{itemizedEquation*}
+	\item Map $(\bposition_0, \bmomentum_0) \to (\bposition(\integrationTime_{\textsc{u}}), - \bmomentum(\integrationTime_{\textsc{u}}))$ is \emph{not} reversible, but no-U-turn algorithm ensures the symmetry of proposals via recursive simulation of trajectories in forward and backward directions.
+	\end{itemize}
+}
+
 
 \end{document}
