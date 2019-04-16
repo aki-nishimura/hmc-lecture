@@ -785,9 +785,38 @@
 
 \section{Tuning HMC: theory and practice}
 
-\subsection{Theoretical guidance on tuning HMC for optimal performance}
+\frame{
+    \frametitle{Table of Contents}
+    \tableofcontents[
+    	  currentsection,
+    	  sectionstyle=show/shaded,
+    	  subsectionstyle=show/shaded/hide
+    ]
+}
 
-\subsection{Tuning HMC in real-life and common ``gotchas''}
+\frame{
+	\frametitle{Tuning parameters of HMC}
+	\begin{itemize}
+	\item Performance of HMC depends critically on the choice of
+		\begin{itemizedEquation*}
+		\arraycolsep=2pt
+			\begin{array}{ccl}
+			\integrationTime \, \text{ or } \, L = \lfloor \integrationTime / \stepsize \rfloor
+				&:& \text{integration time\, or\, path length} \\
+			\stepsize 
+				&:& \text{integrator stepsize} \\
+			\Mass
+				&:& \text{mass matrix}
+			\end{array}
+		\end{itemizedEquation*}
+	\item $\integrationTime$ determines HMC's mixing rate and is often best randomized.
+	\item Choice of $\stepsize$ presents a trade-off between the acceptance rate and the cost of proposal generation.
+		\begin{itemize}
+		\item $\stepsize$ should be small enough for a reasonable acceptance rate but no smaller.
+		\end{itemize}
+	\item $\Mass$ can be used to effectively \textit{precondition} the target distribution, or linearly transform the parameter $\bposition$.
+	\end{itemize} 
+}
 
 
 
