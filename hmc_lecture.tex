@@ -802,23 +802,21 @@
 	\item Performance of HMC depends critically on the choice of
 		\begin{itemizedEquation*}
 		\arraycolsep=2pt
+		\def\arraystretch{1.2}
 			\begin{array}{ccl}
+			\Mass
+				&:& \text{mass matrix} \\
 			\integrationTime \, \text{ or } \, L = \lfloor \integrationTime / \stepsize \rfloor
 				&:& \text{integration time\, or\, path length} \\
 			\stepsize 
-				&:& \text{integrator stepsize} \\
-			\Mass
-				&:& \text{mass matrix}
+				&:& \text{integrator stepsize}
 			\end{array}
 		\end{itemizedEquation*}
-	\item $\integrationTime$ determines HMC's mixing rate and is often best randomized.
-	\item Choice of $\stepsize$ presents a trade-off between the acceptance rate and the cost of proposal generation.
-		\begin{itemize}
-		\item $\stepsize$ should be small enough for a reasonable acceptance rate but no smaller.
-		\end{itemize}
-	\item $\Mass$ can be used to effectively \textit{precondition} the target distribution, or linearly transform the parameter $\bposition$.
 	\end{itemize} 
 }
+
+
+\subsection{Mass matrix for preconditioning target distribution}
 
 \frame{
 	\frametitle{Mass matrix for linear parameter transformation}
@@ -852,9 +850,12 @@
 	\end{itemize}
 }
 
+\subsection{Integration time --- decisive factor on HMC mixing rate}
+
 \frame{
 	\frametitle{Choosing integration time \\ {} \hfill \& Automating choice via No-U-turn criteria}
 	\begin{itemize}
+	\item Integration time $\integrationTime$ determines how ``far'' a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime), - \bmomentum(\integrationTime)$ is from the current state.
 	\item For a Gaussian target, we saw the optimal integration time to be
 		\begin{itemizedEquation*}
 		\integrationTime \approx \frac{\pi}{2} \times \text{the target's widest ``width''}.
@@ -891,9 +892,13 @@
 	\end{itemize}
 }
 
+
+\subsection{Integrator stepsize: accuracy \& computational cost trade-off}
+
 \frame{
-	\frametitle{Tuning integrator stepsize}
+	\frametitle{Choosing integrator stepsize: accuracy \& cost trade-off}
 	\begin{itemize}
+	\item We need $\stepsize$ small enough to achieve a reasonable acceptance rate but smaller values require more gradient evaluations $L = \lfloor \integrationTime / \stepsize \rfloor$.
 	\item Acceptance rate $\acceptprob(\stepsize)$ is a reasonable and easy-to-estimate metric for tuning $\stepsize$: $\acceptprob(\stepsize) \approx 0$ $\Leftrightarrow$ $\stepsize$ too large \& $\acceptprob(\stepsize) \approx 1$ $\Leftrightarrow$ $\stepsize$ too small.
 	\item Once we specify a target acceptance rate, a stochastic optimization algorithm can be used to solve for the corresponding $\stepsize$. 
 	\item What is a good target acceptance rate?
@@ -974,6 +979,30 @@
 		\end{itemize}
 	\item Reparametrization can solve, or at least alleviate, some problems.
 	\item Alternative choice of momentum distributions leads to HMC variants more robust to the numerical stability issues.
+	\end{itemize}
+}
+
+\subsection{Summary}
+
+\frame{
+	\frametitle{Summary / Guide on tuning HMC}
+	\begin{itemize}
+	\item Mass matrix $\Mass$:
+		\begin{itemize}
+		\item Modifying $\Mass$ coincides with linearly transforming the target.
+		\item Common choices are $\Mass = \widehat{\bSigma}$ or $\Mass = \textrm{diag}(\widehat{\bSigma})$. 
+		\end{itemize}
+	\item Integration time $\integrationTime$:
+		\begin{itemize}
+		\item Should be proportional to the ``width'' of the target.
+		\item No-U-turn algorithm provides a generally good solution.
+		\end{itemize}
+	\item Integrator stepsize $\stepsize$:
+		\begin{itemize}
+		\item In complex models, the stability condition often limits its size.
+		\item Set a high target acceptance rate (e.g.\ $0.9$) for peace of mind.
+		\item When instability persists for very small $\stepsize$, it's time to look into reparametrization or even alternative models.
+		\end{itemize}
 	\end{itemize}
 }
 
