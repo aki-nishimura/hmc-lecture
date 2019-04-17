@@ -239,13 +239,13 @@
 \frame{
 	\frametitle{History of ``H''MC}
 	\begin{itemize}
-	\item Invented as "hybrid" Monte Carlo in computational physics literature for computer simulation of lattice models in quantum field theory.
+	\item Invented as ``hybrid'' Monte Carlo in computational physics literature for computer simulation of lattice models in quantum field theory.
 	\item At the time, there were two dominant approaches:
 		\begin{itemize}
-		\item Monte Carlo simulation based on "local" moves, changing the state of one particle at a time.
-		\item molecular dynamics simulation with "global" moves by numerically solving \textit{equations of motion}.
+		\item Monte Carlo simulation based on ``local'' moves, changing the state of one particle at a time.
+		\item molecular dynamics simulation with ``global'' moves by numerically solving \textit{equations of motion}.
 		\end{itemize}
-	\item "Hybrid" Monte Carlo combined the efficiency of molecular dynamics with Metropolis algorithm to ensure the exact stationary distribution.
+	\item ``Hybrid'' Monte Carlo combined the efficiency of molecular dynamics with Metropolis algorithm to ensure the exact stationary distribution.
 	\end{itemize}
 }
 
@@ -254,7 +254,7 @@
 	\begin{itemize}
 	\item Two (often competing) objectives in constructing a proposal density:
 		\begin{itemize}
-		\item you want to make "large" moves to explore the space. 
+		\item you want to make ``large" moves to explore the space. 
 		\item you want sufficiently high acceptance rates.
 		\end{itemize}
 	\item e.g.\ random-walk Metropolis for $\nparam$-dimensional Gaussians:
@@ -269,7 +269,7 @@
 		\end{itemize}
 	\item Question: can we generate proposals that are far away from the current state, yet still maintains high acceptance rate? 
 		\begin{itemize}
-		\item Yes, use Hamiiltonian dynamics to generate proposals! 
+		\item Yes, use Hamiltonian dynamics to generate proposals! 
 		\item In particular, HMC has the cost of $O(d^{1 / 4})$ in the above example.
 		\end{itemize}
 	\end{itemize}
@@ -330,7 +330,7 @@
 	\item Hamilton's equation describes a motion of a particle with mass $m$ under the potential energy field $U(\bposition)$:
 		\begin{itemizedEquation*}
 		\begin{aligned}
-		\text{``velolicty''}
+		\text{``velocity''}
 			&= \frac{\diff \bposition}{\diff t} 
 			= m^{-1} \bmomentum
 			\\
@@ -860,7 +860,7 @@
 \frame{
 	\frametitle{Choosing integration time \\ {} \hfill \& Automating choice via No-U-turn criteria}
 	\begin{itemize}
-	\item Integration time $\integrationTime$ determines how ``far'' a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime), - \bmomentum(\integrationTime)$ is from the current state.
+	\item Integration time $\integrationTime$ determines how ``far'' a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime), - \bmomentum(\integrationTime))$ is from the current state.
 	\item For a Gaussian target, we saw the optimal integration time to be
 		\begin{itemizedEquation*}
 		\integrationTime \approx \frac{\pi}{2} \times \text{the target's widest ``width''}.
