@@ -1011,6 +1011,19 @@
 	\end{itemize}
 }
 
+\frame{
+	\frametitle{How Stan (and other softwares) tune HMC / NUTS}
+	\begin{itemize}
+	\item Stan uses ``warm-up'' iterations to adapt the integrator stepsize and mass matrix. (Terminology: \texttt{warm-up = burn-in + tuning}.)
+	\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{Figure/stan_adaptation_visuallization}
+	\end{figure}
+	\item Adaptation occurs in three stages: 1) stepsize only, 2) both stepsize \& mass matrix over multiple windows, 3) stepsize only.
+	\item Lengths of adaptation are controlled by parameters \texttt{adapt\_init\_buffer}, \texttt{adapt\_term\_buffer}, and \texttt{adapt\_window}.
+	\end{itemize}
+}
+
 
 
 \nobibliography{hmc_lecture}
