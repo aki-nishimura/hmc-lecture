@@ -61,6 +61,8 @@
 \newcommand{\bPhi}{\bm{\Phi}}
 \newcommand{\bSigma}{\bm{\Sigma}}
 \newcommand{\nparam}{d}
+\newcommand{\lshrink}{\lambda}
+\newcommand{\gshrink}{\tau}
 
 % Utility macros
 \newcommand{\todo}[1]{\textcolor{red}{#1}}
@@ -1011,9 +1013,22 @@
 	\end{itemize}
 }
 
+
+\section{Deploying HMC in practice: best practices and useful techniques}
+
 \frame{
-	\frametitle{How Stan (and other softwares) tune HMC / NUTS}
+    \frametitle{Table of Contents}
+    \tableofcontents[
+    	  currentsection,
+    	  sectionstyle=show/shaded,
+    	  subsectionstyle=show/shaded/hide
+    ]
+}
+
+\frame{
+	\frametitle{Automated tuning of HMC / NUTS}
 	\begin{itemize}
+	\item Let's look at how Stan (\& other softwares) tune the HMC parameters.
 	\item Stan uses ``warm-up'' iterations to adapt the integrator stepsize and mass matrix. (Terminology: \texttt{warm-up = burn-in + tuning}.)
 	\begin{figure}
 	\centering
@@ -1023,6 +1038,54 @@
 	\item Lengths of adaptation are controlled by parameters \texttt{adapt\_init\_buffer}, \texttt{adapt\_term\_buffer}, and \texttt{adapt\_window}.
 	\end{itemize}
 }
+
+\frame{
+	\frametitle{Handling constrained and discrete parameters}
+	\begin{itemize}
+	\item Parameters often take values in a constrained space e.g.\ variances, correlation matrices, number of species, etc.
+	\item Hamiltonian dynamics underlying HMC does not natively support constrained or discrete spaces.
+	\item For constrained parameters, the standard approach is to map them to unconstrained ones. For example,
+		\begin{itemize}
+		\item $\sigma > 0$ : $\sigma \to \log \sigma$
+		\item $q \in [0, 1]$ : $q \to \log(q / (1 - q))$
+		\item $\text{correlation matrix} \to \text{partial correlations}$.
+		\end{itemize}
+	\item For discrete parameters, some options exist but no established one:
+		\begin{itemize}
+		\item Stan do not support them (at least as of April, 2019).
+		\item PyMC updates them conditionally on the continuous parameters.
+		\item Discontinuous HMC of \citet{nishimura2017discontinuous-hmc} extends HMC to accommodate ordinal discrete parameters. Adopted by \citet{gram2018dhmc-for-probabilistic-programs}, but not yet widely available.
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Initializing Markov chain with reasonable values}
+	\begin{itemize}
+	\item Thoughtless initialization (e.g.\ through Stan default) often yields a state \emph{nowhere near} the stationarity.
+	\item Shape of the target distribution near the initial state and at stationarity --- and hence appropriate stepsize and mass matrix --- may be totally different!
+	\item Poor initialization can thus delay HMC to reach stationarity and to find a reasonable stepsize and mass matrix. 
+	\item Good ways to initialize?
+		\begin{itemize}
+		\item Sampling an initial state from a prior, when using an informative one, is probably better than the software default.
+		\item Run an optimization algorithm to find a local mode of the target. (PyMC takes a step further and uses a variational inference.)
+		\end{itemize}
+	\end{itemize}
+}
+
+\frame{
+	\frametitle{Re-parametrizing to decouple model parameters}
+	\begin{itemize}
+	\item Alternative parametrizations of equivalent models can make substantial differences in computational tractability of the posteriors.
+	\item In the Gaussian example, we saw the computational cost of HMC (when $\Mass = \I$) to increase as the correlations increase.
+		\begin{itemize}
+		\item Diagonal mass matrix can account for differences in scale among the coordinates, but not the correlation structure.
+		\end{itemize}
+	\item More generally, if we can reduce dependence among the parameters, posterior computation becomes easier.
+	\item Example: parameters $(\beta, \sigma)$ with structure $\beta \given \sigma \sim \normal(0, \sigma^2)$ and $\sigma \sim \pi_{\Sigma}(\cdot)$ can be re-parametrized as $(\tilde{\beta} = \beta / \sigma , \sigma)$ so that $\tilde{\beta} \indep \sigma$.
+	\end{itemize}
+}
+
 
 
 
