@@ -1086,7 +1086,15 @@
 	\end{itemize}
 }
 
-
+\frame{
+	\frametitle{Scaling model parameters to comparable units}
+	\begin{itemize}
+	\item Magnitude of posterior uncertainty tend to be proportional to the scale of a parameter.
+	\item e.g.\ if regressing ``income (usd)'' and ``years in school'' on some outcome, the income coefficient will likely have a smaller variance.
+	\item Diagonal mass can account for the scale differences, but empirical adaptation may take significantly longer if the parameters are on vastly different scales to begin with.
+	\item If the parameters are obviously on different scales, therefore, you might as well rescale them before fitting the model.
+	\end{itemize}
+}
 
 
 \nobibliography{hmc_lecture}
