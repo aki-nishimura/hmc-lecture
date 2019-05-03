@@ -25,6 +25,7 @@
 \renewbibmacro{volume+number+eid}{} % Get rid of the volume and number.
 \DeclareFieldFormat*{journaltitle}{\textit{#1}.}
 \DeclareFieldFormat*{pages}{}
+\DeclareFieldFormat*{volume}{}
 \DeclareFieldFormat*{urldate}{}
 \newcommand{\fullauthorcite}[1]{
 	\AtNextCite{\defcounter{maxnames}{99}}
@@ -1121,7 +1122,7 @@
 \subsection*{References}
 
 \frame{
-	\frametitle{References}
+	\frametitle{References: best practices and useful techniques}
 	\begin{indented}
 	Many wisdoms in addressing practical issues can be found in 
 	\end{indented}
@@ -1145,6 +1146,24 @@
 	\end{indented}
 		\begin{itemize}
 		\item \fullauthorcite{rstanarm}
+		\end{itemize}
+}
+
+\frame{
+	\frametitle{References: best practices and useful techniques}
+	\begin{indented}
+	For extensions of HMC to more complex parameter spaces, see
+	\end{indented}
+		\begin{itemize}
+		\item \fullauthorcite{dinh2017probabilistic-hmc}
+		\item \fullauthorcite{nishimura2017discontinuous-hmc}
+		\item \fullauthorcite{gram2018dhmc-for-probabilistic-programs}
+		\end{itemize}
+	\begin{indented}
+	Discrete parameters must be marginalized in Stan but if you need to sample them PyMC can handle it:
+	\end{indented}
+		\begin{itemize}
+		\item \fullauthorcite{pymcdoc-compound-step}
 		\end{itemize}
 }
 
