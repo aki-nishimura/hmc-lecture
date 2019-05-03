@@ -1,5 +1,4 @@
 *.aux
-*.bbl
 *.log
 *.synctex.gz
 *.nav
@@ -7,5 +6,11 @@
 *.snm
 *.toc
 *.DS_Store
+
+# Bibliography auxiliary files (bibtex/biblatex/biber):
+*.bbl
+*.blg
+*-blx.bib
+*.run.xml
 
 hmc_lecture.pdf
