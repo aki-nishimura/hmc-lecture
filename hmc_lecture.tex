@@ -21,6 +21,9 @@
 	natbib=true, 
 	backend=bibtex
 	]{biblatex}
+\makeatletter
+\def\blx@maxline{77} % To deal with a bug in an older version of the biblatex package.
+\makeatother  
 \renewbibmacro{in:}{} % Remove "in" before the journal title.
 \renewbibmacro{volume+number+eid}{} % Get rid of the volume and number.
 \DeclareFieldFormat*{journaltitle}{\textit{#1}.}
@@ -630,6 +633,36 @@
 				 \vspace{-\baselineskip}
 		\end{enumerate}
 	\end{block}
+}
+
+\subsection*{References}
+
+\frame{
+	\frametitle{References: HMC theory}
+	\begin{indented}
+	Overviews of (the basic version of) HMC in theory and practice are provided by
+	\end{indented}
+		\begin{itemize}
+		\item \fullcite{neal2010hmc}
+		\end{itemize}
+	\begin{indented}
+	Another review paper with alternative perspectives:
+	\end{indented}
+		\begin{itemize}
+		\item \fullcite{betancourt2017intro-hmc}
+		\end{itemize}
+}
+
+\frame{
+	\frametitle{References: HMC theory}
+	\begin{indented}
+	Notable extensions and generalization of the basic HMC:
+	\end{indented}
+		\begin{itemize}
+		\item \fullauthorcite{girolami2011rmhmc}
+		\item \fullauthorcite{fang2014compressible-hmc}
+		\item \fullauthorcite{nishimura2017discontinuous-hmc}
+		\end{itemize}
 }
 
 
