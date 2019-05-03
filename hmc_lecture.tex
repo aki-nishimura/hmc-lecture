@@ -10,15 +10,28 @@
 \usepackage{bm}
 \usepackage{dsfont}
 \usepackage{subcaption}
-\usepackage{natbib}
-\usepackage{bibentry} % For \nobibliography
 \usepackage{bbm}
 \usepackage{calc}  % For widthof command
 \usepackage{xcolor}
 \usepackage{tikz}
-\usepackage{natbib}
-\bibliographystyle{abbrvnat}
-\setcitestyle{authoryear, open={(}, close={)}}
+\usepackage{csquotes} % Necessary for biblatex.
+\usepackage[
+	style=authoryear-comp, 
+	maxcitenames=2,
+	natbib=true, 
+	backend=bibtex
+	]{biblatex}
+\renewbibmacro{in:}{} % Remove "in" before the journal title.
+\renewbibmacro{volume+number+eid}{} % Get rid of the volume and number.
+\DeclareFieldFormat*{journaltitle}{\textit{#1}.}
+\DeclareFieldFormat*{pages}{}
+\DeclareFieldFormat*{urldate}{}
+\newcommand{\fullauthorcite}[1]{
+	\AtNextCite{\defcounter{maxnames}{99}}
+	\fullcite{#1}
+}
+\addbibresource{hmc_lecture.bib}
+
 
 \setbeamerfont{itemize/enumerate subbody}{size=\normalsize} %to set the body size
 %\setbeamertemplate{frametitle}[default][center]
@@ -103,6 +116,11 @@
 	\end{equation*} \ignorespacesafterend
 }
 \makeatother
+\newenvironment{indented}{
+	\hfill \begin{minipage}{\dimexpr\textwidth-3ex} 
+}{
+	\end{minipage}
+}
 
 
 % Color definitions
@@ -123,6 +141,10 @@
 \setbeamercolor{section in head/foot}{fg=textcolor}
 %\colorlet{toccolor}{black}
 %\setbeamercolor{section in toc}{fg=toccolor}
+
+\setbeamercolor{bibliography entry author}{fg=black}
+\setbeamercolor{bibliography entry title}{use=structure, fg=structure.fg}
+\setbeamercolor{bibliography entry note}{fg=black}
 
 %  Block colors
 \setbeamercolor{block title}{use=structure, fg=textcolor, bg=structure.fg}
@@ -1096,7 +1118,35 @@
 	\end{itemize}
 }
 
+\subsection*{References}
 
-\nobibliography{hmc_lecture}
+\frame{
+	\frametitle{References}
+	\begin{indented}
+	Many wisdoms in addressing practical issues can be found in 
+	\end{indented}
+		\begin{itemize}
+		\item \fullauthorcite{stan18}
+		\end{itemize}
+	\begin{indented}
+	Details on Stan's tuning algorithm can be found at 
+	\end{indented}
+		\begin{itemize}
+		\item \fullauthorcite{stan-hmc-params}
+		\end{itemize}
+	\begin{indented}
+	Common types of problematic posteriors (and ways to deal with or avoid them) are described at
+	\end{indented}	
+		\begin{itemize}
+		\item \fullauthorcite{stan-problematic-posterior}
+		\end{itemize}
+	\begin{indented}
+	R package \texttt{rstanarm} provides wrapper functions of models written in optimized Stan codes:
+	\end{indented}
+		\begin{itemize}
+		\item \fullauthorcite{rstanarm}
+		\end{itemize}
+}
+
 
 \end{document}
