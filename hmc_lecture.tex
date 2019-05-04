@@ -1,5 +1,14 @@
 \documentclass[18pt]{beamer}
 
+\def\withInlineNote{0}
+\usepackage{todonotes}
+
+%\usepackage{pgfpages} % For showing notes on the 2nd screen.
+%\setbeameroption{show notes}
+%\setbeameroption{hide notes} % Only slides
+%\setbeameroption{show only notes} % Only notes
+%\setbeameroption{show notes on second screen=right} % Both
+
 \usetheme{Madrid} % [secheader]
 \setbeamertemplate{footline}{}
 \usefonttheme{professionalfonts}
@@ -82,7 +91,11 @@
 \newcommand{\gshrink}{\tau}
 
 % Utility macros
-\newcommand{\todo}[1]{\textcolor{red}{#1}}
+\newcommand{\inlineNote}[1]{%
+	\if\withInlineNote1% 
+	\todo[inline]{#1}%
+	\fi%
+}
 
 % Fun macros
 \newcommand{\shrug}[1][]{
@@ -214,31 +227,37 @@
 \frame{
 	\frametitle{What is HMC? (and what it is \textbf{not})}
 	\begin{itemize}
-	\item HMC is \textbf{not} a silver-bullet, though often good enough for computing posteriors of not-overly-complicated models with moderate sized data.
-	\item HMC can be almost guaranteed to fail on certain target distributions.
+	\item HMC is \textbf{not} a silver-bullet, though often good enough for computing posteriors of not-overly-complicated models with moderate sized data. \inlineNote{Just tempering enthusiasm.}%
+	\pause
+	\item HMC is almost guaranteed to fail on certain target distributions.
 		\begin{itemize}
-		\item Work-arounds may exists in some cases, but not always.
+		\item Reasonable enough work-arounds often exist (if not always).
 		\end{itemize}
 	\item Performance of HMC is sensitive to
 		\begin{itemize}
 		\item parametrization of the model.
 		\item tuning parameters (which may be adjusted during a ``warm-up'').
 		\end{itemize}
+	\pause
 	\item In general, prefer
 		\vspace{-.75\baselineskip}
 		\begin{multline*}
 		\text{model-specific inference algorithm by an expert} \\
 			> \text{probabilistic programming implemnetation} \\
-			> \text{your own code} \hspace{.05\linewidth}
+			> \text{your own code}. \hspace{.05\linewidth}
 		\end{multline*} \vspace{-1.5\baselineskip}
-	\item When no other solid solutions exists, use Bayesian modeling and posterior computation via HMC as ``the least of all possible evils.''
+	\item When the data actually call for the power of custom Bayesian modeling, HMC is a reasonable option for posterior computation.
+		% Note: ``once the data gets large enough or the model gets complex enough, one will pay the price in terms of computational time.''
 	\end{itemize}
 }
 
 \frame{
-	\frametitle{What is HMC? (and what it is \textbf{not})}
+	\frametitle{HMC at its best}
 	\begin{itemize}
 	\item Some softwares (e.g.\ \texttt{rstanarm}) incorporate model-specific best practices in applying HMC, yielding quite impressive performance.
+		\begin{itemize}
+		\item Given the complexity of applying HMC effectively, using these softwares is a good way to get a sense of HMC's capability.
+		\end{itemize}
 	\item Some cutting-edge Bayesian methods rely on HMC for posterior computation with competitive computational efficiency.
 		\begin{itemize}
 		\item e.g.\ Bayesian sparse regression for GLM and survival analysis
@@ -252,11 +271,11 @@
 	\item Sensitivity of HMC's performance means that, even as an end-user, one benefits from basic understandings of the algorithm.
 	\item Hopefully, you will 
 		\begin{itemize}
+		\item be able to diagnose why (and fix if possible) when sampling fails.
+		\item know when to change default parameters in software packages.
 		\item know how to parametrize your model for best HMC performance.
 		\item develop intuitions as to when posterior computation is feasible.
-		\item be able to diagnose (and fix if possible) when sampling fails.
-		\item know when to change default parameters in software packages.
-		\item be familiar with research frontiers and improvements on the way.
+%		\item be familiar with research frontiers and improvements on the way.
 		\end{itemize}
 	\end{itemize}
 }
@@ -267,7 +286,8 @@
 \frame{
 	\frametitle{History of ``H''MC}
 	\begin{itemize}
-	\item Invented as ``hybrid'' Monte Carlo in computational physics literature for computer simulation of lattice models in quantum field theory.
+	\item Invented as ``hybrid'' Monte Carlo in computational physics literature for computer simulation of lattice models in quantum field theory \citep{duane1987hmc}.
+		\inlineNote{HMC may seem to come from nowhere, so a bit of history to help.}%
 	\item At the time, there were two dominant approaches:
 		\begin{itemize}
 		\item Monte Carlo simulation based on ``local'' moves, changing the state of one particle at a time.
@@ -285,17 +305,20 @@
 		\item you want to make ``large" moves to explore the space. 
 		\item you want sufficiently high acceptance rates.
 		\end{itemize}
+	\pause
 	\item e.g.\ random-walk Metropolis for $\nparam$-dimensional Gaussians:
 		\begin{itemize}
 		\item As $d \to \infty$, proposal variance needs to scale proportional to $1 / d$ to maintain a positive acceptance rate.
-		\item With proposal variance $\propto 1 / d$, it takes $\nparam$ steps for the chain to travel a unit distance.
+		\item With proposal variance $\propto 1 / d$, it takes $\nparam$ steps for the chain to travel a unit distance in each coordinate.
 		\item Cost of generating one effective sample then is proportional to
 			\begin{itemizedEquation*}
 			\nparam \times \text{(cost of likelihood evaluation)}. 
 			\end{itemizedEquation*}
 		% Note: the cost is often described as $O(d^2)$ in the literature under the assumption that the likelihood evaluation costs $O(d)$.
 		\end{itemize}
+	\pause
 	\item Question: can we generate proposals that are far away from the current state, yet still maintains high acceptance rate? 
+	\pause
 		\begin{itemize}
 		\item Yes, use Hamiltonian dynamics to generate proposals! 
 		\item In particular, HMC has the cost of $O(d^{1 / 4})$ in the above example.
@@ -316,6 +339,7 @@
 			\propto \pi_\Position(\bposition) \times \mathcal{N}\left( \bmomentum \, ; \mathbf{0}, m \I \right) 
 		\end{itemizedEquation*}
 		where $\bposition$ and $\bmomentum$ are referred to as \textit{position} and \textit{momentum} variables.
+		\pause
 		\item HMC terminologies:
 		\begin{itemize}
 			\item $U(\bposition) = - \log \pi_\Theta(\bposition)$ : \textit{potential energy}.
@@ -332,7 +356,7 @@
 	\end{itemize}
 	\begin{block}{HMC transition rule}
 		Given the current state $(\bposition_0, \bmomentum_0)$, HMC generates the next state as follows:
-		\begin{enumerate}
+		\begin{enumerate}[<+->]
 			\item Randomize momentum: $\bmomentum_0 \sim \mathcal{N}\left(\mathbf{0}, m \I \right)$.
 			\item Generate a proposal $(\bposition^*, \bmomentum^*) \approx (\bposition(\integrationTime), - \bmomentum(\integrationTime))$ by approximating \newline the solution $\left\{ (\bposition(t), \bmomentum(t)) : t \in [0, \integrationTime] \right\}$ of \textit{Hamilton's equation}
 				\vspace{-.3\baselineskip}
