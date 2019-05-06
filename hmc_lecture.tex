@@ -1,6 +1,6 @@
 \documentclass[18pt]{beamer}
 
-\def\withInlineNote{0}
+\def\withInlineNote{1}
 \usepackage{todonotes}
 
 %\usepackage{pgfpages} % For showing notes on the 2nd screen.
@@ -420,14 +420,18 @@
 		= \proposalKernel\left\{ (\bposition^*, \bmomentum^*) \to (\bposition, \bmomentum) \right\}
 	\end{itemizedEquation*}
 	by virtue of its \textit{reversibility} (and \textit{volume-preservation}).
+		\inlineNote{`volume-preservation' in () since we can do without it.}%
+	\pause
 		\begin{itemize}
 		\item For a deterministic proposal kernel, interpret the symmetry as
-		\begin{itemizedEquation*}
-		\proposalKernel\left\{ S \to S^* \right\}
-			= \proposalKernel\left\{ S^* \to S \right\}
-		\end{itemizedEquation*}
+			\begin{itemizedEquation*}
+			\proposalKernel\left\{ S \to S^* \right\}
+				= \proposalKernel\left\{ S^* \to S \right\}
+			\end{itemizedEquation*}
 		for a pair of sets $S$ and $S^*$.
 		\end{itemize}
+			\inlineNote{in case the audience is bothered by the "delta measure" proposal.}%
+	\pause
 	\item Evolution of Hamiltonian dynamics can be ``reversed'' (or ``inverted'') by flipping momentum and applying the same dynamics:
 		\begin{itemizedEquation*}
 		(\bposition, \bmomentum) \to (\bposition', \bmomentum')
@@ -439,6 +443,7 @@
 
 \frame{
 	\frametitle{Symmetry via reversibility of Hamiltonian dynamics}
+	\inlineNote{a bit heavy on math notions, but just to be precise on reversibility.}%
 	\begin{itemize}
 	\item Let $\{ \solutionOp_t \}_{t \in \mathbb{R}}$ denote the \textit{solution operator} of dynamics i.e.\ 
 		\begin{itemizedEquation*}
@@ -465,6 +470,8 @@
 	\item In practice, Hamiltonian dynamics must be numerically approximated.
 	\item \textit{Integrator} refers to an algorithm for approximating solutions of ODEs.
 	\item For an approximate dynamics to remain a valid proposal mechanism, the integrator must preserve reversibility (and volume-preservation).
+	\pause
+		\inlineNote{Update equations need to be untangled a bit.}%
 	\item To approximate the evolution from time $t$ to $t + \stepsize$ of dynamics
 		\begin{itemizedEquation*}
 		\frac{\diff \bposition}{\diff t} 
@@ -499,8 +506,8 @@
 	\begin{itemize}
 	\item If we could solve Hamiltonian dynamics exactly, then HMC proposals would have $100\%$ (!) acceptance rates.
 	\item In essence, this is because the target $\pi(\cdot, \cdot)$ is an \textit{invariant} distribution of the dynamics --- if $(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$, then $\solutionOp_t(\bposition, \bmomentum) \sim \pi(\cdot, \cdot)$ for all $t$.
+	\pause
 	\item With numerical approximation, acceptance rate of HMC proposals  converges to 1 as $\stepsize \to 0$ for a fixed $\tau$ and $\nIntegrationStep(\tau) = \lfloor \tau / \stepsize \rfloor$.
-		% TODO : later provide a more quantitative discussion of the error as a function of stepsize.
 	\end{itemize}
 }
 
@@ -514,9 +521,10 @@
 				\pi(\bposition^*, \bmomentum^*) \left| \Diff \solutionOp(\bposition, \bmomentum) \right|
 			}{
 				\pi(\bposition, \bmomentum)}
-		\right\}
+		\right\}.
 		\end{itemizedEquation*}
 		\vspace{-.5\baselineskip}
+			\inlineNote{Introduce formula before discussing energy conservation.}%
 		\begin{itemize}
 		\item To see why the Jacobian is needed, recall that the density of a transformed variables $(\bposition^*, \bmomentum^*) = \solutionOp(\bposition, \bmomentum)$ is given as
 			\begin{itemizedEquation*}
@@ -524,6 +532,7 @@
 				= \pi_{\Position, \, \Momentum}(\bposition, \bmomentum) \left| \Diff \solutionOp(\bposition, \bmomentum) \right|^{-1}.
 			\end{itemizedEquation*}
 		\end{itemize}
+	\pause
 	\item Hamiltonian dynamics and its leapfrog approximation are both volume-preserving, meaning $\left| \Diff \solutionOp_{\integrationTime} \right| = \left| \Diff \solutionOp_{\stepsize}^\nIntegrationStep \right| = 1$.
 	\item Hence, the acceptance probability of an HMC proposal is
 		\begin{itemizedEquation*}
@@ -549,7 +558,8 @@
 			= H(\bposition(0), \bmomentum(0))
 			\ \text{ for all } \ t.
 		\end{itemizedEquation*}
-	\item With the leapfrog approximation for a fixed $\integrationTime$,  the error is
+		\vspace*{-1.25\baselineskip} \pause
+	\item With the leapfrog approximation for a fixed $\integrationTime$, the error is
 		\begin{itemizedEquation*}
 		\Delta H
 			= H(\bposition_{\nIntegrationStep \stepsize}, \bmomentum_{\nIntegrationStep \stepsize})
@@ -559,12 +569,13 @@
 	\item Metropolis proposals in general satisfies, as $\Delta H \to 0$,
 		\begin{itemizedEquation*}
 		\mathbb{E}\left[ \Delta H \right]
-			\approx \frac{1}{2} \, \mathbb{E}\left[ \Delta H^2 \right]
+			\approx \frac{1}{2} \, \mathbb{E}\left[ \Delta H^2 \right].
 		\end{itemizedEquation*}
 		% Note: we have an actual bound $E[\Delta H] \leq E[\Delta H^2]$ for a reversible dynamics-based proposal.
 		% Note: the above relation holds for any Metropolis type algorithm
 	\item HMC proposals thus satisfies $\mathbb{E}[\Delta H] = O(\stepsize^{\textcolor{highlightedTextColor}{4}})$ as $\stepsize \to 0$.
-	\item e.g.\ HMC generates one effective sample from $\nparam$-dimensional Gaussians with the cost of
+	\pause
+	\item e.g.\ HMC generates one effective sample from a $\nparam$-dimensional Gaussian $\normal(\bm{0}, \I)$ with the cost of
 		\begin{itemizedEquation*}
 		\nparam^{1 / 4} \times \text{(cost of likelihood \& gradient evaluation)}.
 		\end{itemizedEquation*}
@@ -591,7 +602,7 @@
 	\frametitle{Another look at HMC transition kernel}
 	\vspace{-.3\baselineskip}
 	\begin{itemize}
-	\item Having covered details, we now state the algorithm more precisely.
+	\item Having covered details, here is a more precise and general description.% we now state the algorithm more precisely.
 		\begin{itemize}
 		\item \textit{Mass} $\Mass = \textrm{Var}(\bmomentum)$ need not to be proportional to the identity.
 		\item Momentum flip is optional since $\pi(\bposition, \bmomentum) = \pi(\bposition, -\bmomentum)$.
@@ -630,7 +641,8 @@
 	\item Same theories justify a  more general version below.
 		\begin{itemize}
 		\item Any symmetric, potentially position-dependent, distribution can be employed for momentum: $- \bmomentum \given \bposition \eqDistribution \bmomentum \given \bposition \sim \pi_{\Momentum \given \Position}(\, \cdot \given \bposition)$.
-		\item Note: a \textit{symplectic} integrator is reversible and volume-preserving.
+		\item Note: \textit{symplectic} integrators are volume-preserving.
+		% Note: \textit{symplectic} integrators, commonly discussed in the HMC literature, are volume-preserving.
 		\end{itemize}
 	\end{itemize}
 	\vspace{-.3\baselineskip}
