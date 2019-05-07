@@ -751,7 +751,7 @@
 	\item In case of a Gaussian target, one leapfrog can be expressed as
 		\begin{itemizedEquation*}
 		\begin{bmatrix}
-		\bposition_{n \stepsize} \\ \bmomentum_{n \stepsize}
+		\position_{n \stepsize} \\ \momentum_{n \stepsize}
 		\end{bmatrix}
 			= 
 			{\def\arraystretch{1.5}
@@ -761,7 +761,7 @@
 			\end{bmatrix}
 			}
 			\begin{bmatrix}
-			\bposition_{(n - 1) \stepsize} \\ \bmomentum_{(n - 1) \stepsize}
+			\position_{(n - 1) \stepsize} \\ \momentum_{(n - 1) \stepsize}
 			\end{bmatrix}.
 		\end{itemizedEquation*}
 	\item Eigenvalues of the leapfrog map $\solutionOp_{\stepsize}$ have magnitude $< 1$ if and only if the stepsize is within the \textit{stability region} $\stepsize < 2 \sigma$.
@@ -775,7 +775,7 @@
 	\item For $\stepsize < 2 \sigma$, we have the following formula for $\solutionOp_{\stepsize}^n$:
 		\begin{itemizedEquation*}
 		\begin{bmatrix}
-		\bposition_{n \stepsize} \\ \bmomentum_{n \stepsize}
+		\position_{n \stepsize} \\ \momentum_{n \stepsize}
 		\end{bmatrix}
 			= 
 			\arraycolsep=0pt
@@ -786,7 +786,7 @@
 				& \cos(n \phi)
 			\end{bmatrix}	
 			\begin{bmatrix}
-			\bposition_{0} \\ \bmomentum_{0}
+			\position_{0} \\ \momentum_{0}
 			\end{bmatrix}
 		\end{itemizedEquation*}
 		where $\phi = \phi(\stepsize / \sigma) = \cos^{-1}\!\left( 1 - \frac{\stepsize^2}{2 \sigma^2} \right)$.
@@ -796,7 +796,7 @@
 		\cos(L \phi) \approx 0
 			\ \text{ \& } \sin(L \phi) \approx 1
 		\end{itemizedEquation*}
-	and the proposal $(\bposition_{\nIntegrationStep \stepsize},  \bmomentum_{\nIntegrationStep \stepsize})$ approximately independent of $(\bposition_{0},  \bmomentum_{0})$. 
+	and the proposal $(\position_{\nIntegrationStep \stepsize},  \momentum_{\nIntegrationStep \stepsize})$ approximately independent of $(\position_{0},  \momentum_{0})$. 
 	\end{itemize}
 }
 
@@ -807,9 +807,9 @@
 		\begin{itemizedEquation*}
 		\Delta H 
 			= - \log \frac{
-					\pi(\bposition_{\nIntegrationStep \stepsize},  \bmomentum_{\nIntegrationStep \stepsize})
+					\pi(\position_{\nIntegrationStep \stepsize},  \momentum_{\nIntegrationStep \stepsize})
 				}{
-					\pi(\bposition_{0},  \bmomentum_{0})
+					\pi(\position_{0},  \momentum_{0})
 				}.
 		\end{itemizedEquation*}
 	\item After tedious calculation, we can show that
