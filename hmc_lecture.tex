@@ -96,6 +96,7 @@
 	\todo[inline]{#1}%
 	\fi%
 }
+\newcommand{\pauseWithoutSpace}{\par\pause\noindent}
 
 % Fun macros
 \newcommand{\shrug}[1][]{
@@ -558,7 +559,7 @@
 			= H(\bposition(0), \bmomentum(0))
 			\ \text{ for all } \ t.
 		\end{itemizedEquation*}
-		\vspace*{-1.25\baselineskip} \pause
+		\pauseWithoutSpace
 	\item With the leapfrog approximation for a fixed $\integrationTime$, the error is
 		\begin{itemizedEquation*}
 		\Delta H
@@ -729,12 +730,14 @@
 			\frac{\diff^2 \position}{\diff t^2} = - \frac{\position}{\sigma^2}
 			.
 		\end{itemizedEquation*}
-	\item Solution coincides a harmonic oscillator with period $2 \pi \sigma$:
+	\pauseWithoutSpace
+	\item Solution coincides with a harmonic oscillator of period $2 \pi \sigma$:
 		\begin{itemizedEquation*}
 		\position(t) 
-			= \position_0 \cos(t / \sigma) + \momentum_0 \, \sigma \sin(t / \sigma).
+			= \position_0 \cos(t / \sigma) + \momentum_0 \, \sigma \sin(t / \sigma).%
 			% , \ \ \momentum(t) = \dot{\position}(t)
-		\end{itemizedEquation*}
+		\end{itemizedEquation*}%
+	\pauseWithoutSpace
 	\item If $\position_0 \sim \normal(0, \sigma^2)$ and $\momentum_0 \sim \normal(0, 1)$, then $\position(t) \sim \normal(0, \sigma^2)$ for all $t$ and \vspace{-.7\baselineskip}
 		\begin{itemizedEquation*}
 		\position(\integrationTime) 
@@ -747,6 +750,7 @@
 
 \frame{
 	\frametitle{Leapfrog dynamics \& stability limit on integrator stepsize}
+	\inlineNote{Mathematical details not so important on the next few slides! Main things to note are stability limit and integration time choice.}
 	\begin{itemize}
 	\item In case of a Gaussian target, one leapfrog can be expressed as
 		\begin{itemizedEquation*}
@@ -790,7 +794,8 @@
 			\end{bmatrix}
 		\end{itemizedEquation*}
 		where $\phi = \phi(\stepsize / \sigma) = \cos^{-1}\!\left( 1 - \frac{\stepsize^2}{2 \sigma^2} \right)$.
-	\item Since $\cos^{-1}(1 - \delta^2 / 2) \approx \delta$, we have $ n \phi \approx n \stepsize / \sigma$ as $\stepsize / \sigma \to 0$.
+	\item Since $\cos^{-1}(1 - \delta^2 / 2) \approx \delta$, we have $\phi \approx \stepsize / \sigma$ as $\stepsize / \sigma \to 0$.
+	\pause
 	\item For $\stepsize$ sufficiently small, a choice $\nIntegrationStep \approx \frac{\pi \sigma}{2 \stepsize}$ yields
 		\begin{itemizedEquation*}
 		\cos(L \phi) \approx 0
@@ -812,6 +817,7 @@
 					\pi(\position_{0},  \momentum_{0})
 				}.
 		\end{itemizedEquation*}
+	\pauseWithoutSpace
 	\item After tedious calculation, we can show that
 		\begin{itemizedEquation*}
 		\mathbb{E} \left[ \Delta H \right]
@@ -837,6 +843,7 @@
 	\begin{itemize}
 	\item Consider the target $\bposition \sim \normal(\bm{0}, \bm{\Sigma})$, $\bmomentum \sim \normal(\bm{0}, \I)$.
 	\item With the identity mass, HMC's performance turns out to be invariant under rotation of the parameter i.e.\ we can assume that $\bSigma$ is diagonal.
+	\pause
 	\item With $U(\bposition) = \sum_{i = 1}^\nparam \frac{\position_i}{2 \sigma_i^2}$ and $K(\bmomentum) = \sum_{i = 1}^\nparam \frac{p_i^2}{2}$, Hamilton's equation decouples into $\nparam$ independent one-dimensional equations:
 		\begin{itemizedEquation*}
 		\frac{\diff \position_i}{\diff t} = \momentum_i, \ \
@@ -844,6 +851,7 @@
 			\ \ \text{ for } \ \
 			i = 1, \ldots, \nparam.
 		\end{itemizedEquation*}
+	\pauseWithoutSpace
 	\item Leapfrog update also decouples into one-dimensional updates:
 		\begin{itemize}
 		\item Direction with the \textit{smallest} variance determines the overall stability limit of $\stepsize < 2 \min_i \sigma_i$.
@@ -857,7 +865,13 @@
 	\frametitle{Computational cost of HMC on multivariate Guassians}
 	\begin{itemize}
 	\item Computational cost is $\propto L \propto \frac{\sigma_{\max}}{\stepsize}$. What $\stepsize$ to use?
-	\item Stability limit is $\stepsize < 2 \sigma_{\min}$, but $\Delta H$ needs to be controlled too.
+	\pause
+	\item Stability limit is $\stepsize < 2 \sigma_{\min}$, but does not guarantee small $\Delta H$. Two major sources of the total error $\Delta H$ are
+		\begin{enumerate}
+		\item small errors accumulated over many parameters.
+		\item large errors in a small number of ``tightly constrained'' directions.
+		\end{enumerate}
+	\pause
 	\item In an extreme case $\sigma_i = \sigma_0$ for all $i$'s, we have
 		\begin{itemizedEquation*}
 		\mathbb{E}\left[ \Delta H \right]
@@ -867,11 +881,12 @@
 		\vspace{-\baselineskip}
 		\begin{itemize}
 		\item Need $\Delta t \propto d^{-1/4}$ to maintain a positive acceptance rate.
-		\item Computational costs becomes $\propto \sigma_{\max} \, d^{1 / 4}$.
+		\item Computational costs becomes $\propto d^{1 / 4}$.
 		\end{itemize}
-	\item In another extreme case $\sigma_{\min} \ll \sigma_i$ for $i \neq \argmin_j \sigma_j$, the error is completely dominated by $\Delta H_{\argmin_i \sigma_i}$. 
+	\pause
+	\item In another extreme case $\sigma_m = \sigma_{\min} \ll \sigma_i$ for $i \neq m$, the error is completely dominated by $\Delta H_{m}$. 
 		\begin{itemize}
-		\item Since $\mathbb{E} \left[ \Delta H_i \right] \propto \stepsize / \sigma_i$ and $\stepsize < 2 \sigma_{\min}$, there are little contributions to the overall error from $\Delta H_i$ for $i \neq \argmin_j \sigma_j$. 
+		\item Since $\mathbb{E} \left[ \Delta H_i \right] \propto (\stepsize / \sigma_i)^4$ and $\stepsize < 2 \sigma_{\min}$, there are little contributions to the overall error from $\Delta H_i$ for $i \neq m$. %$i \neq \argmin_j \sigma_j$
 		\item Computational costs becomes $\propto \sigma_{\max} / \sigma_{\min}$ --- the ratio \\ between the largest and smallest ``widths'' of the target.
 		\end{itemize}
 	\end{itemize}
