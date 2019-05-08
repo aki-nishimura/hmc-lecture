@@ -925,7 +925,7 @@
 		\arraycolsep=2pt
 		\def\arraystretch{1.2}
 			\begin{array}{ccl}
-			\Mass
+			\Mass = \textrm{Var}(\bmomentum)
 				&:& \text{mass matrix} \\
 			\integrationTime \, \text{ or } \, L = \lfloor \integrationTime / \stepsize \rfloor
 				&:& \text{integration time\, or\, path length} \\
@@ -948,14 +948,17 @@
 	\frametitle{Mass matrix for linear parameter transformation}
 	\begin{itemize}
 	\item \textbf{Fact :} HMC's performance remains identical whether sampling from the (joint) parameter space $(\bm{A} \bposition, \bmomentum)$ and from $(\bposition, \bm{A}^\transpose \bmomentum)$.
+	\pause
 	\item When using the identity mass $\Mass = \I$, 
 		\begin{itemize}
 		\item the computational cost tends to increase as the ratio between the largest and smallest ``widths'' of the target does.
 		\item (linear) reparametrization $\bposition \to \bSigma^{-1/2} \bposition$ for $\bSigma = \text{Var}(\bposition)$ often improves the efficiency.
 		\end{itemize}
 	\item In other words, we expect HMC to perform best when sampling from the transformed parameter $\bSigma^{-1/2} \bposition$ with $\bmomentum \sim \normal(\bm{0}, \I)$.
+	\pause
 	\item Equivalently, we can sample from the original parameter $\bposition$ but with a transformed momentum $\bSigma^{-1/2} \bmomentum \sim \normal(\bm{0}, \Mass = \bSigma^{-1})$.
-	\item Summary: choose $\Mass = \text{Var}(\bposition)^{-1}$ to sample effectively from $\bSigma^{-1/2} \bposition$.
+%	\pause
+%	\item Summary: choose $\Mass = \text{Var}(\bposition)^{-1}$ to sample effectively from $\bSigma^{-1/2} \bposition$.
 	\end{itemize}
 }
 
@@ -963,13 +966,16 @@
 	\frametitle{Tuning mass matrix in practice}
 	\begin{itemize}
 	\item In real-life, reparametrization $\bSigma^{-1/2} \bposition$ may not be optimal e.g.\ a target can have the identity covariance with all sorts of complex geometries.
+	\pause
 	\item When $\pi_\Position(\bposition)$ is log-concave, the Hessian of $- \log \pi_\Position(\bposition)$ is a locally optimal choice for the mass matrix.
 		% Note: information theory backs up this statement to an extent, but to my knowledge this is not a proven statement.
 	\item What about more general cases? Who knows \shrug.
+	\pause
 	\item But let's say we aim for $\Mass = \text{Var}(\bposition)^{-1}$ as commonly done.
 		\begin{itemize}
 		\item $\bSigma$ can be estimated during the ``warm-up \!/\! burn-in'' period.
 		\item Empirical covariance is unstable in high-dimensions; we may estimate the marginal variances only and set $\Mass = \textrm{diag}(\bm{\widehat{\Sigma}})^{-1}$.
+		\pause
 		\item As the non-identity mass has an effect of implicit transformation $\bposition \to \Mass^{1/2} \bposition$, choice of $\Mass$ and of $\stepsize$ interact with each other.
 		\item We want to keep the narrowest ``width'' of the distribution of $\Mass^{1/2} \bposition$ constant, so scale $\Mass$ to have the smallest eigenvalue $1$.
 		\end{itemize}
@@ -987,8 +993,9 @@
 		\integrationTime \approx \frac{\pi}{2} \times \text{the target's widest ``width''}.
 		\end{itemizedEquation*}
 	\item ``$\integrationTime \propto \text{width}$'' is a useful way of thinking, but provides no practical guidance in general settings.
+	\pause
 	\item One possibility is to empirically calibrate $\integrationTime$ to maximize a performance metric such as an \textit{expected jumping distance}.
-	\item Reliable, generally efficient, and simpler alternative is to use the \textit{no-U-turn} algorithm to obviate the need for manually choosing $\integrationTime$.
+	\item Reliable, generally efficient, and simpler alternative is to use the \textit{no-U-turn} algorithm to obviate the need for manually choosing $\integrationTime$. \citep{hoffman2014nuts}
 	\end{itemize}
 }
 
@@ -997,6 +1004,7 @@
 	\begin{itemize}
 	\item No-U-turn algorithm is often described as a version of HMC, but can be used with any reversible dynamics-based samplers.
 	\item No-U-turn sampler (NUTS) refers to HMC + No-U-turn algorithm.
+	\pause
 	\item \textbf{Motivation}: Trajectories of Hamiltonian dynamics, if simulated long enough, typically start turning back toward where it started. 
 		\begin{itemize}
 		\item Recall the harmonic oscillation in the Gaussian case.
@@ -1025,11 +1033,13 @@
 	\frametitle{Choosing integrator stepsize: accuracy \& cost trade-off}
 	\begin{itemize}
 	\item We need $\stepsize$ small enough to achieve a reasonable acceptance rate but smaller values require more gradient evaluations $L = \lfloor \integrationTime / \stepsize \rfloor$.
+	\pause
 	\item Acceptance rate $\acceptprob(\stepsize)$ is a reasonable and easy-to-estimate metric for tuning $\stepsize$: $\acceptprob(\stepsize) \approx 0$ $\Leftrightarrow$ $\stepsize$ too large \& $\acceptprob(\stepsize) \approx 1$ $\Leftrightarrow$ $\stepsize$ too small.
 	\item Once we specify a target acceptance rate, a stochastic optimization algorithm can be used to solve for the corresponding $\stepsize$. 
+	\pause
 	\item What is a good target acceptance rate?
 		\begin{itemize}
-		\item \cite{beskos2013optimal-hmc} show $0.651$ to be optimal under high-dimensional i.i.d.\ distributions.
+		\item \cite{beskos2013optimal-hmc} show $0.651$ to be optimal under a high-dimensional parameter space with i.i.d.\ distributions.
 		\item \cite{betancourt2014hmc-stepsize} say $0.6 \sim 0.9$, with larger values more robust in practice.
 		\item Stan's default is $0.8$.
 		\item I say start with $0.9$ and further decrease $\stepsize$ when you notice frequent instability / divergence of simulated trajectories. \\
@@ -1071,34 +1081,38 @@
 		\begin{itemize}
 		\item HMC is geometrically ergodic if and only if $1 \leq \alpha \leq 2$.
 		\end{itemize}
-	 \item Example: $\position \sim \textrm{Exp}(1) \geq 0$
-	 	\begin{itemize}
-	 	\item Sampling from $\position' = \log \position$ is a common practice to avoid having to deal with the constraint $\position \geq 0$. But for $\position \sim \textrm{Exp}(1)$ we  have
- 		 	\begin{itemizedEquation*}
- 		 	\pi_{\log \Position}(\position')
- 		 		= \exp \left( \position' - e^{\position'} \right)
- 		 	\end{itemizedEquation*}
-		 and HMC on $\position'$ is provably \emph{not} geometrically ergodic!
-	 	\end{itemize}
-	\end{itemize}
-}
-
-\frame{
-	\frametitle{Practically, if not provably, small enough stepsize for HMC}
-	\begin{itemize}
+%	 \item Example: $\position \sim \textrm{Exp}(1) \geq 0$
+%	 	\begin{itemize}
+%	 	\item Sampling from $\position' = \log \position$ is a common practice to avoid having to deal with the constraint $\position \geq 0$. But for $\position \sim \textrm{Exp}(1)$ we  have
+% 		 	\begin{itemizedEquation*}
+% 		 	\pi_{\log \Position}(\position')
+% 		 		= \exp \left( \position' - e^{\position'} \right)
+% 		 	\end{itemizedEquation*}
+%		 and HMC on $\position'$ is provably \emph{not} geometrically ergodic!
+%	 	\end{itemize}
+	\pause
 	\item Um, it sounds like HMC does \emph{not} work on many target distributions? \\
 		--- Yes, but don't worry about it.
 		\hspace*{-1ex} ...\ I mean, avoid obvious problems but otherwise proceed and later check for potential issues.
-	\item In practice, we are typically concerned with regions of highest density, not where ``$\| \bposition \| \to \infty$.''
-	\item Stability limit on $\stepsize$, if restricted to a high density region, is almost surely bounded below.
+		\pause
+		\begin{itemize}
+		\item Hard to salvage HMC performance on a heavy-tailed target, so lighten up the tail via parameter transformation if necessary.
+		\item Light-tail is a real concern, potentially causing instability, but small enough stepsize can often adequately remedy the situation.
+		\end{itemize}
 	\end{itemize}
 }
 
 \frame{
 	\frametitle{Practically, if not provably, small enough stepsize for HMC}
 	\begin{itemize}
-	\item In other words, $\stepsize$ just need to be small enough for the integrator to remain stable within a high density region.
-	\item I know, it may not sound like an ideal solution, but theory almost never coincides with practice: get over with it.
+	\item In practice, we are typically concerned with regions of highest density, not where ``$\| \bposition \| \to \infty$.''
+		\inlineNote{This does not get talked about enough (IMO), but got to be why HMC usually gives reasonable enough answers.}
+		\begin{itemize}
+		\item Stability limit on $\stepsize$, if restricted to a high density region, is almost surely bounded below by a value $> 0$. 
+		\item In other words, $\stepsize$ just need to be small enough for the integrator to remain stable within a high density region.
+		\end{itemize}
+	\pause
+	\item Yes, theoretical guarantees would be nice, but real-life data analysis never comes with such guarantees --- get over with it.
 		\begin{itemize}
 		\item Target distributions, if potentially problematic to HMC, are likely problematic to other algorithms as well.
 			% Note: though HMC may be a bit more sensitive.
