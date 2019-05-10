@@ -244,7 +244,7 @@
 		\vspace{-.75\baselineskip}
 		\begin{multline*}
 		\text{model-specific inference algorithm by an expert} \\
-			> \text{probabilistic programming implemnetation} \\
+			> \text{probabilistic programming implementation} \\
 			> \text{your own code}. \hspace{.05\linewidth}
 		\end{multline*} \vspace{-1.5\baselineskip}
 	\item When the data actually call for the power of custom Bayesian modeling, HMC is a reasonable option for posterior computation.
@@ -275,7 +275,7 @@
 		\item be able to diagnose why (and fix if possible) when sampling fails.
 		\item know when to change default parameters in software packages.
 		\item know how to parametrize your model for best HMC performance.
-		\item develop intuitions as to when posterior computation is feasible.
+%		\item develop intuitions as to when posterior computation is feasible.
 %		\item be familiar with research frontiers and improvements on the way.
 		\end{itemize}
 	\end{itemize}
@@ -344,7 +344,7 @@
 		\item HMC terminologies:
 		\begin{itemize}
 			\item $U(\bposition) = - \log \pi_\Theta(\bposition)$ : \textit{potential energy}.
-			\item $K(\bmomentum) = \frac{1}{m} \bmomentum^\transpose \bmomentum$ : \textit{kinetic energy}.
+			\item $K(\bmomentum) = - \log \pi_{\Momentum}(\bmomentum) = \frac{1}{m} \bmomentum^\transpose \bmomentum$ : \textit{kinetic energy}.
 			\item $H(\bposition, \bmomentum) = U(\bposition) + K(\bmomentum) = - \log \pi(\bposition, \bmomentum)$ : \newline \phantom{$H(\bposition, \bmomentum) = U(\bposition) + K(\bmomentum)$ =} \textit{Hamiltonian} or \textit{total energy}.
 		\end{itemize}
 	\end{itemize}
@@ -719,7 +719,7 @@
 	\begin{itemize}
 	\item We first consider HMC's behavior for $\position \sim \normal(0, \sigma^2)$, $\momentum \sim \normal(0, 1)$ or
 		\begin{itemizedEquation*}
-		U(\position) =  \frac{\position^2}{2 \sigma^2}, \ \
+		U(\position) = - \log \pi_{\Position}(\position) =  \frac{\position^2}{2 \sigma^2} + \textrm{const}, \ \
 		K(\momentum) =  \frac{\momentum^2}{2}.
 		\end{itemizedEquation*}
 	\item Corresponding dynamics is described by
@@ -795,7 +795,6 @@
 		\end{itemizedEquation*}
 		where $\phi = \phi(\stepsize / \sigma) = \cos^{-1}\!\left( 1 - \frac{\stepsize^2}{2 \sigma^2} \right)$.
 	\item Since $\cos^{-1}(1 - \delta^2 / 2) \approx \delta$, we have $\phi \approx \stepsize / \sigma$ as $\stepsize / \sigma \to 0$.
-	\pause
 	\item For $\stepsize$ sufficiently small, a choice $\nIntegrationStep \approx \frac{\pi \sigma}{2 \stepsize}$ yields
 		\begin{itemizedEquation*}
 		\cos(L \phi) \approx 0
@@ -844,7 +843,7 @@
 	\item Consider the target $\bposition \sim \normal(\bm{0}, \bm{\Sigma})$, $\bmomentum \sim \normal(\bm{0}, \I)$.
 	\item With the identity mass, HMC's performance turns out to be invariant under rotation of the parameter i.e.\ we can assume that $\bSigma$ is diagonal.
 	\pause
-	\item With $U(\bposition) = \sum_{i = 1}^\nparam \frac{\position_i}{2 \sigma_i^2}$ and $K(\bmomentum) = \sum_{i = 1}^\nparam \frac{p_i^2}{2}$, Hamilton's equation decouples into $\nparam$ independent one-dimensional equations:
+	\item With $U(\bposition) = \sum_{i = 1}^\nparam \frac{\position_i^2}{2 \sigma_i^2}$ and $K(\bmomentum) = \sum_{i = 1}^\nparam \frac{p_i^2}{2}$, Hamilton's equation decouples into $\nparam$ independent one-dimensional equations:
 		\begin{itemizedEquation*}
 		\frac{\diff \position_i}{\diff t} = \momentum_i, \ \
 		\frac{\diff \momentum_i}{\diff t} = - \frac{\position_i}{\sigma_i^2}
