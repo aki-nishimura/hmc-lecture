@@ -380,8 +380,11 @@
 				\end{aligned}
 				\end{equation}
 				with initial condition $(\bposition(0), \bmomentum(0)) = (\bposition_0, \bmomentum_0)$.
-			\item Accept or reject the proposal. 
-				% with the probability $$ \min\left\{1, \pi(\bposition^*, \bmomentum^*) / \pi(\bposition, \bmomentum) \right\} $$
+			\item Accept or reject the proposal with the acceptance probability
+				\begin{itemizedEquation*}
+				\min\left\{1, \pi(\bposition^*, \bmomentum^*) / \pi(\bposition, \bmomentum) \right\}.
+				\end{itemizedEquation*}
+				\vspace*{-\baselineskip}
 		\end{enumerate}
 	\end{block}
 }
@@ -534,7 +537,6 @@
 		\right\}.
 		\end{itemizedEquation*}
 		\vspace{-.5\baselineskip}
-			\inlineNote{Introduce formula before discussing energy conservation.}%
 		\begin{itemize}
 		\item To see why the Jacobian is needed, recall that the density of a transformed variables $(\bposition^*, \bmomentum^*) = \solutionOp(\bposition, \bmomentum)$ is given as
 			\begin{itemizedEquation*}
@@ -635,11 +637,11 @@
 				\end{aligned}
 				\end{equation}
 				with initial condition $(\bposition(0), \bmomentum(0)) = (\bposition_0, \bmomentum_0)$.
-			\item Accept or reject the proposal \textcolor{highlightedTextColor}{with the acceptance probability
+			\item Accept or reject the proposal with the acceptance probability
 				\begin{itemizedEquation*}
 				\min\left\{1, \pi(\bposition^*, \bmomentum^*) / \pi(\bposition, \bmomentum) \right\}.
 				\end{itemizedEquation*}
-				} \vspace{-\baselineskip}
+				\vspace{-\baselineskip}
 		\end{enumerate}
 	\end{block}
 }
