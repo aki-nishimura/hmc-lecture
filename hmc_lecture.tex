@@ -226,16 +226,13 @@
 }
 
 \frame{
-	\frametitle{What is HMC? (and what it is \textbf{not})}
+	\frametitle{What to expect from HMC}
 	\begin{itemize}
-	\item HMC is \textbf{not} a silver-bullet, though often good enough for computing posteriors of not-overly-complicated models with moderate sized data. \inlineNote{Just tempering enthusiasm.}%
+	\item HMC can handle a large class of posteriors for not-overly-complicated models with moderate sized data, but is \emph{not} a silver-bullet.
 	\pause
-	\item HMC is almost guaranteed to fail on certain target distributions.
-		\begin{itemize}
-		\item Reasonable enough work-arounds often exist (if not always).
-		\end{itemize}
 	\item Performance of HMC is sensitive to
 		\begin{itemize}
+		\item structure / geometry of the target distribution.
 		\item parametrization of the model.
 		\item tuning parameters (which may be adjusted during a ``warm-up'').
 		\end{itemize}
