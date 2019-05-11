@@ -226,6 +226,18 @@
 }
 
 \frame{
+	\frametitle{What to expect from HMC?}
+	\begin{indented}
+	HMC is typically superior to more traditional general-purpose samplers:
+	\end{indented}
+	\begin{figure}
+	\includegraphics[width=.85\textwidth]{Figure/random_walk_metropolis_vs_hmc_on_100dim_Gaussian}
+	\caption{Comparison of random-walk Metropolis and HMC on a 100-dimensional Gaussian; horizontal axes are scaled to account for computational costs \citep{neal2010hmc}.}
+		% Note: $\bSigma^{1/2} = \textrm{diag}(0.01, 0.02, \ldots, 1)$
+	\end{figure}
+}
+
+\frame{
 	\frametitle{What to expect from HMC}
 	\begin{itemize}
 	\item HMC can handle a large class of posteriors for not-overly-complicated models with moderate sized data, but is \emph{not} a silver-bullet.
