@@ -232,7 +232,7 @@
 	\end{indented}
 	\begin{figure}
 	\includegraphics[width=.85\textwidth]{Figure/random_walk_metropolis_vs_hmc_on_100dim_Gaussian}
-	\caption{Comparison of random-walk Metropolis and HMC on a 100-dimensional Gaussian; horizontal axes are scaled to account for computational costs \citep{neal2010hmc}.}
+	\caption{Comparison of random-walk Metropolis and HMC on a 100-dimensional Gaussian. Horizontal axes are scaled to account for computational costs \citep{neal2010hmc}.}
 		% Note: $\bSigma^{1/2} = \textrm{diag}(0.01, 0.02, \ldots, 1)$
 	\end{figure}
 }
@@ -524,6 +524,8 @@
 	\end{itemize}
 }
 
+\def\generalAcceptProbFormula{1}
+\if\generalAcceptProbFormula1
 \frame{
 	\frametitle{Acceptance probability of reversible map proposals}
 	\begin{itemize}
@@ -562,10 +564,23 @@
 	\inlineNote{Note how the magnitude \& sign of $\Delta H$ affect the acceptance rate.}
 	\end{itemize}
 }
+\fi
 
 \frame{
 	\frametitle{Energy-conservation property for high acceptance rate}
 	\begin{itemize}
+	\if\generalAcceptProbFormula0
+	\item Acceptance probability is, in terms of $\Delta H = H(\bposition^*, \bmomentum^*) - H(\bposition, \bmomentum)$,
+		\begin{itemizedEquation*}
+		\min \! \left\{
+			1, \, \pi(\bposition^*, \bmomentum^*) / \pi(\bposition, \bmomentum)
+		\right\}
+			= \min \! \left\{
+				1, \, \exp( - \Delta H)
+			\right\}.
+		\end{itemizedEquation*}
+	\pauseWithoutSpace
+	\fi
 	\item Hamiltonian dynamics is \textit{energy-conserving}, meaning the Hamiltonian remains constant along its trajectory $(\bposition(t), \bmomentum(t))$:
 		\begin{itemizedEquation*}
 		H(\bposition(t), \bmomentum(t)) 
@@ -583,7 +598,7 @@
 	\item Metropolis proposals in general satisfies, as $\Delta H \to 0$,
 		\begin{itemizedEquation*}
 		\mathbb{E}\left[ \Delta H \right]
-			\approx \frac{1}{2} \, \mathbb{E}\left[ \Delta H^2 \right].
+			\approx \mathbb{E}\left[ \Delta H^2 \right] / \, 2.
 		\end{itemizedEquation*}
 		% Note: we have an actual bound $E[\Delta H] \leq E[\Delta H^2]$ for a reversible dynamics-based proposal.
 		% Note: the above relation holds for any Metropolis type algorithm
