@@ -731,7 +731,7 @@
 }
 
 
-\section{Case study: HMC on Gaussian targets}
+\section{Example: HMC on Gaussian targets}
 
 \frame{
 	\frametitle{Table of Contents}
@@ -740,6 +740,20 @@
 		sectionstyle=show/shaded,
 		subsectionstyle=show/shaded/hide
 	]
+}
+
+\frame{
+	\frametitle{Example: HMC on Gaussian targets}
+	\begin{itemize}
+	\item HMC's behavior on Gaussian targets can be quantified explicitly.
+	\item Arguably the easiest case for HMC, but illustrate many of the characteristic properties. 
+	\item Some of the things to pay attention to:
+		\begin{itemize}
+		\item ``periodic'' behavior of HMC trajectories.
+		\item how a choice of integration time $\integrationTime$ or path length $L = \lfloor \integrationTime / \stepsize \rfloor$ affects the mixing rate.
+		\item acceptance rate as a function of integrator stepsize $\stepsize$.
+		\end{itemize}
+	\end{itemize}
 }
 
 \frame{
