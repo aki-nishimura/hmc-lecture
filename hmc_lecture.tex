@@ -1,7 +1,6 @@
 \documentclass[18pt]{beamer}
 
 \def\withInlineNote{0}
-\usepackage{todonotes}
 \def\generalAcceptProbFormula{1}
 
 %\usepackage{pgfpages} % For showing notes on the 2nd screen.
@@ -45,6 +44,9 @@
 	\fullcite{#1}
 }
 \addbibresource{hmc_lecture.bib}
+
+% Packaged used only under specific conditions.
+\if\generalAcceptProbFormula1 \usepackage{todonotes} \fi
 
 
 \setbeamerfont{itemize/enumerate subbody}{size=\normalsize} %to set the body size
