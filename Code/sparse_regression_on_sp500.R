@@ -37,7 +37,7 @@ if (scale_outcome) {
 ## Fit the regularized horseshoe model with Stan.
 library(rstan)
 
-hierarchical_parametrization <- TRUE
+hierarchical_parametrization <- FALSE
 if (hierarchical_parametrization) {
   stancode_filename <- 'horseshoe_linear_model_hierarchical_parametrization.stan'
 } else {
