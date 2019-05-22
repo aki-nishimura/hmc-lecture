@@ -11,8 +11,6 @@ X <- as.matrix(
 y <- c(as.matrix(
   read.csv(outcome_filename, row.names = 'date')
 ))
-sample_size <- dim(X)[1]
-n_predictor <- dim(X)[2]
 
 
 # Preprocess and prepare the data for analysis.
@@ -28,7 +26,7 @@ if (standardize_predictors) {
 }
 if (scale_outcome) {
   pred_var <- sapply(
-    1:n_predictor, function (col_index) var(X[, col_index])
+    1:dim(X)[2], function (col_index) var(X[, col_index])
   )
   y <- sqrt(sum(pred_var)) / sd(y) * y
 }
@@ -51,8 +49,8 @@ initial_state <- "random" # Convenient, but not the best approach.
 params_to_save <- c('lp__', 'beta', 'lscale', 'gscale', 'sigma_obs')
 stan_data <- list(
   y=y, X=X, 
-  sample_size=sample_size, 
-  n_predictor=n_predictor,
+  sample_size=length(y), 
+  n_predictor=dim(X)[2],
   regularizing_slab_size=1.
 )
 
