@@ -11,7 +11,9 @@ X <- as.matrix(
 y <- c(as.matrix(
   read.csv(outcome_filename, row.names = 'date')
 ))
-
+y <- log(y[-1]) - log(y[-length(y)])
+X <- log(X[-1, ]) - log(X[-dim(X)[1], ])
+  # Take the log-return.
 
 # Preprocess and prepare the data for analysis.
 
