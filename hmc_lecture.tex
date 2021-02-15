@@ -238,8 +238,9 @@
 	\end{indented}
 	\begin{figure}
 	\includegraphics[width=.85\textwidth]{Figure/random_walk_metropolis_vs_hmc_on_100dim_Gaussian}
-	\caption{Comparison of random-walk Metropolis and HMC on a 100-dimensional Gaussian. Horizontal axes are scaled to account for computational costs \citep{neal2010hmc}.}
+	\caption{Comparison on a 100-dimensional Gaussian after accounting for computational costs by thinning RWM \citep{neal2010hmc}.}
 		% Note: $\bSigma^{1/2} = \textrm{diag}(0.01, 0.02, \ldots, 1)$
+		% Note: counting 150 random-walk Metropolis updates as one iteration
 	\end{figure}
 }
 
